@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2e6ffb3866264574af3cbf7334adc312" Name="Diagram1">
+        <EntityTypeShape EntityType="MusicPortalModel.Album" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.AlbumStyle" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.Composition" Width="1.5" PointX="10.5" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.Country" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.Genre" Width="1.5" PointX="12.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.Language" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.MusicalGroup" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.MusicalGroupType" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.Musician" Width="1.5" PointX="8.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.Role" Width="1.5" PointX="10.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.User" Width="1.5" PointX="12.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.UserDownloadedCompositions" Width="1.5" PointX="15" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusicPortalModel.UserListenedComposition" Width="1.5" PointX="15" PointY="2.875" IsExpanded="true" />
+        <AssociationConnector Association="MusicPortalModel.FK_Album_AlbumStyle" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_Album_MusicalGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_Composition_Album" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_Composition_Language" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_UserDownloadedCompositions_Composition" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_UserListenedComposition_Composition" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_Musician_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_MusicalGroup_MusicalGroupType" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_User_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_UserDownloadedCompositions_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.FK_UserListenedComposition_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.CompositionGenre" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.MusiciansInGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.UserFavoriteComposition" ManuallyRouted="false" />
+        <AssociationConnector Association="MusicPortalModel.UserFavoriteMusicalGroup" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

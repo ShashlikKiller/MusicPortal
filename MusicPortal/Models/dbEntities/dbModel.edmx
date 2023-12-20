@@ -1,0 +1,1062 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище MusicPortalModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="style_id" Type="int" Nullable="false" />
+          <Property Name="releaseDate" Type="date" Nullable="false" />
+          <Property Name="musicalgroup_id" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AlbumStyle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="style" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Composition">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="duration" Type="time" Precision="7" Nullable="false" />
+          <Property Name="album_id" Type="int" Nullable="false" />
+          <Property Name="language_id" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "MusicPortal.dbo.CompositionGenre" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="CompositionGenre">
+          <Key>
+            <PropertyRef Name="genre_id" />
+            <PropertyRef Name="composition_id" />
+          </Key>
+          <Property Name="genre_id" Type="int" Nullable="false" />
+          <Property Name="composition_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="countryName" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="genreName" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="languageName" Type="varchar" MaxLength="35" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MusicalGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="groupName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="musicalgrouptype_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MusicalGroupType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="groupType" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Musician">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="surName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="country_id" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "MusicPortal.dbo.MusiciansInGroup" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="MusiciansInGroup">
+          <Key>
+            <PropertyRef Name="musicalgroup_id" />
+            <PropertyRef Name="musician_id" />
+          </Key>
+          <Property Name="musicalgroup_id" Type="int" Nullable="false" />
+          <Property Name="musician_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role_name" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nickname" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="login" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="role_id" Type="int" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserDownloadedCompositions" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="UserDownloadedCompositions">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="composition_id" />
+            <PropertyRef Name="downloadDate" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="composition_id" Type="int" Nullable="false" />
+          <Property Name="downloadDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserFavoriteComposition" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="UserFavoriteComposition">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="composition_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="composition_id" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserFavoriteMusicalGroup" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="UserFavoriteMusicalGroup">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="musicalgroup_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="musicalgroup_id" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserListenedComposition" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="UserListenedComposition">
+          <Key>
+            <PropertyRef Name="composition_id" />
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="dateOfListening" />
+          </Key>
+          <Property Name="composition_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="dateOfListening" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Album_AlbumStyle">
+          <End Role="AlbumStyle" Type="Self.AlbumStyle" Multiplicity="1" />
+          <End Role="Album" Type="Self.Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlbumStyle">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Album">
+              <PropertyRef Name="style_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Album_MusicalGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="1" />
+          <End Role="Album" Type="Self.Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Album">
+              <PropertyRef Name="musicalgroup_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Composition_Album">
+          <End Role="Album" Type="Self.Album" Multiplicity="1" />
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Album">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="album_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Composition_Language">
+          <End Role="Language" Type="Self.Language" Multiplicity="1" />
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Language">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompositionGenre_Composition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
+          <End Role="CompositionGenre" Type="Self.CompositionGenre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Composition">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CompositionGenre">
+              <PropertyRef Name="composition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompositionGenre_Genre">
+          <End Role="Genre" Type="Self.Genre" Multiplicity="1" />
+          <End Role="CompositionGenre" Type="Self.CompositionGenre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CompositionGenre">
+              <PropertyRef Name="genre_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MusicalGroup_MusicalGroupType">
+          <End Role="MusicalGroupType" Type="Self.MusicalGroupType" Multiplicity="1" />
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroupType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MusicalGroup">
+              <PropertyRef Name="musicalgrouptype_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Musician_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Musician" Type="Self.Musician" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Musician">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MusiciansInGroup_MusicalGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="1" />
+          <End Role="MusiciansInGroup" Type="Self.MusiciansInGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MusiciansInGroup">
+              <PropertyRef Name="musicalgroup_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MusiciansInGroup_Musician">
+          <End Role="Musician" Type="Self.Musician" Multiplicity="1" />
+          <End Role="MusiciansInGroup" Type="Self.MusiciansInGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musician">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MusiciansInGroup">
+              <PropertyRef Name="musician_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDownloadedCompositions_Composition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
+          <End Role="UserDownloadedCompositions" Type="Self.UserDownloadedCompositions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Composition">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserDownloadedCompositions">
+              <PropertyRef Name="composition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDownloadedCompositions_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserDownloadedCompositions" Type="Self.UserDownloadedCompositions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserDownloadedCompositions">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavoriteComposition_Composition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
+          <End Role="UserFavoriteComposition" Type="Self.UserFavoriteComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Composition">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteComposition">
+              <PropertyRef Name="composition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavoriteComposition_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserFavoriteComposition" Type="Self.UserFavoriteComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteComposition">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavoriteMusician_MusicalGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="1" />
+          <End Role="UserFavoriteMusicalGroup" Type="Self.UserFavoriteMusicalGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteMusicalGroup">
+              <PropertyRef Name="musicalgroup_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavoriteMusician_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserFavoriteMusicalGroup" Type="Self.UserFavoriteMusicalGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteMusicalGroup">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserListenedComposition_Composition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
+          <End Role="UserListenedComposition" Type="Self.UserListenedComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Composition">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserListenedComposition">
+              <PropertyRef Name="composition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserListenedComposition_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserListenedComposition" Type="Self.UserListenedComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserListenedComposition">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище MusicPortalModelContainer">
+          <EntitySet Name="Album" EntityType="Self.Album" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlbumStyle" EntityType="Self.AlbumStyle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Composition" EntityType="Self.Composition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Language" EntityType="Self.Language" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MusicalGroup" EntityType="Self.MusicalGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MusicalGroupType" EntityType="Self.MusicalGroupType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Musician" EntityType="Self.Musician" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompositionGenre" EntityType="Self.CompositionGenre" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CompositionGenre].[genre_id] AS [genre_id], 
+    [CompositionGenre].[composition_id] AS [composition_id]
+    FROM [dbo].[CompositionGenre] AS [CompositionGenre]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="MusiciansInGroup" EntityType="Self.MusiciansInGroup" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MusiciansInGroup].[musicalgroup_id] AS [musicalgroup_id], 
+    [MusiciansInGroup].[musician_id] AS [musician_id]
+    FROM [dbo].[MusiciansInGroup] AS [MusiciansInGroup]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="UserDownloadedCompositions" EntityType="Self.UserDownloadedCompositions" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserDownloadedCompositions].[user_id] AS [user_id], 
+    [UserDownloadedCompositions].[composition_id] AS [composition_id], 
+    [UserDownloadedCompositions].[downloadDate] AS [downloadDate]
+    FROM [dbo].[UserDownloadedCompositions] AS [UserDownloadedCompositions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="UserFavoriteComposition" EntityType="Self.UserFavoriteComposition" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserFavoriteComposition].[user_id] AS [user_id], 
+    [UserFavoriteComposition].[composition_id] AS [composition_id]
+    FROM [dbo].[UserFavoriteComposition] AS [UserFavoriteComposition]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="UserFavoriteMusicalGroup" EntityType="Self.UserFavoriteMusicalGroup" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserFavoriteMusicalGroup].[user_id] AS [user_id], 
+    [UserFavoriteMusicalGroup].[musicalgroup_id] AS [musicalgroup_id]
+    FROM [dbo].[UserFavoriteMusicalGroup] AS [UserFavoriteMusicalGroup]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="UserListenedComposition" EntityType="Self.UserListenedComposition" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserListenedComposition].[composition_id] AS [composition_id], 
+    [UserListenedComposition].[user_id] AS [user_id], 
+    [UserListenedComposition].[dateOfListening] AS [dateOfListening]
+    FROM [dbo].[UserListenedComposition] AS [UserListenedComposition]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Album_AlbumStyle" Association="Self.FK_Album_AlbumStyle">
+            <End Role="AlbumStyle" EntitySet="AlbumStyle" />
+            <End Role="Album" EntitySet="Album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Album_MusicalGroup" Association="Self.FK_Album_MusicalGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="Album" EntitySet="Album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Composition_Album" Association="Self.FK_Composition_Album">
+            <End Role="Album" EntitySet="Album" />
+            <End Role="Composition" EntitySet="Composition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Composition_Language" Association="Self.FK_Composition_Language">
+            <End Role="Language" EntitySet="Language" />
+            <End Role="Composition" EntitySet="Composition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompositionGenre_Composition" Association="Self.FK_CompositionGenre_Composition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="CompositionGenre" EntitySet="CompositionGenre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompositionGenre_Genre" Association="Self.FK_CompositionGenre_Genre">
+            <End Role="Genre" EntitySet="Genre" />
+            <End Role="CompositionGenre" EntitySet="CompositionGenre" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MusicalGroup_MusicalGroupType" Association="Self.FK_MusicalGroup_MusicalGroupType">
+            <End Role="MusicalGroupType" EntitySet="MusicalGroupType" />
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Musician_Country" Association="Self.FK_Musician_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Musician" EntitySet="Musician" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MusiciansInGroup_MusicalGroup" Association="Self.FK_MusiciansInGroup_MusicalGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="MusiciansInGroup" EntitySet="MusiciansInGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MusiciansInGroup_Musician" Association="Self.FK_MusiciansInGroup_Musician">
+            <End Role="Musician" EntitySet="Musician" />
+            <End Role="MusiciansInGroup" EntitySet="MusiciansInGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDownloadedCompositions_Composition" Association="Self.FK_UserDownloadedCompositions_Composition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="UserDownloadedCompositions" EntitySet="UserDownloadedCompositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDownloadedCompositions_User" Association="Self.FK_UserDownloadedCompositions_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserDownloadedCompositions" EntitySet="UserDownloadedCompositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteComposition_Composition" Association="Self.FK_UserFavoriteComposition_Composition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="UserFavoriteComposition" EntitySet="UserFavoriteComposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteComposition_User" Association="Self.FK_UserFavoriteComposition_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserFavoriteComposition" EntitySet="UserFavoriteComposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteMusician_MusicalGroup" Association="Self.FK_UserFavoriteMusician_MusicalGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="UserFavoriteMusicalGroup" EntitySet="UserFavoriteMusicalGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteMusician_User" Association="Self.FK_UserFavoriteMusician_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserFavoriteMusicalGroup" EntitySet="UserFavoriteMusicalGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserListenedComposition_Composition" Association="Self.FK_UserListenedComposition_Composition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="UserListenedComposition" EntitySet="UserListenedComposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserListenedComposition_User" Association="Self.FK_UserListenedComposition_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserListenedComposition" EntitySet="UserListenedComposition" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MusicPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="style_id" Type="Int32" Nullable="false" />
+          <Property Name="releaseDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="musicalgroup_id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AlbumStyle" Relationship="Self.FK_Album_AlbumStyle" FromRole="Album" ToRole="AlbumStyle" />
+          <NavigationProperty Name="MusicalGroup" Relationship="Self.FK_Album_MusicalGroup" FromRole="Album" ToRole="MusicalGroup" />
+          <NavigationProperty Name="Composition" Relationship="Self.FK_Composition_Album" FromRole="Album" ToRole="Composition" />
+        </EntityType>
+        <EntityType Name="AlbumStyle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="style" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Album" Relationship="Self.FK_Album_AlbumStyle" FromRole="AlbumStyle" ToRole="Album" />
+        </EntityType>
+        <EntityType Name="Composition">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="duration" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="album_id" Type="Int32" Nullable="false" />
+          <Property Name="language_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Album" Relationship="Self.FK_Composition_Album" FromRole="Composition" ToRole="Album" />
+          <NavigationProperty Name="Language" Relationship="Self.FK_Composition_Language" FromRole="Composition" ToRole="Language" />
+          <NavigationProperty Name="UserDownloadedCompositions" Relationship="Self.FK_UserDownloadedCompositions_Composition" FromRole="Composition" ToRole="UserDownloadedCompositions" />
+          <NavigationProperty Name="UserListenedComposition" Relationship="Self.FK_UserListenedComposition_Composition" FromRole="Composition" ToRole="UserListenedComposition" />
+          <NavigationProperty Name="Genre" Relationship="Self.CompositionGenre" FromRole="Composition" ToRole="Genre" />
+          <NavigationProperty Name="User" Relationship="Self.UserFavoriteComposition" FromRole="Composition" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="countryName" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Musician" Relationship="Self.FK_Musician_Country" FromRole="Country" ToRole="Musician" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="genreName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Composition" Relationship="Self.CompositionGenre" FromRole="Genre" ToRole="Composition" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="languageName" Type="String" MaxLength="35" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Composition" Relationship="Self.FK_Composition_Language" FromRole="Language" ToRole="Composition" />
+        </EntityType>
+        <EntityType Name="MusicalGroup">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="groupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="musicalgrouptype_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Album" Relationship="Self.FK_Album_MusicalGroup" FromRole="MusicalGroup" ToRole="Album" />
+          <NavigationProperty Name="MusicalGroupType" Relationship="Self.FK_MusicalGroup_MusicalGroupType" FromRole="MusicalGroup" ToRole="MusicalGroupType" />
+          <NavigationProperty Name="Musician" Relationship="Self.MusiciansInGroup" FromRole="MusicalGroup" ToRole="Musician" />
+          <NavigationProperty Name="User" Relationship="Self.UserFavoriteMusicalGroup" FromRole="MusicalGroup" ToRole="User" />
+        </EntityType>
+        <EntityType Name="MusicalGroupType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="groupType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="MusicalGroup" Relationship="Self.FK_MusicalGroup_MusicalGroupType" FromRole="MusicalGroupType" ToRole="MusicalGroup" />
+        </EntityType>
+        <EntityType Name="Musician">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="surName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="country_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Country" Relationship="Self.FK_Musician_Country" FromRole="Musician" ToRole="Country" />
+          <NavigationProperty Name="MusicalGroup" Relationship="Self.MusiciansInGroup" FromRole="Musician" ToRole="MusicalGroup" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nickname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="role_id" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="UserDownloadedCompositions" Relationship="Self.FK_UserDownloadedCompositions_User" FromRole="User" ToRole="UserDownloadedCompositions" />
+          <NavigationProperty Name="UserListenedComposition" Relationship="Self.FK_UserListenedComposition_User" FromRole="User" ToRole="UserListenedComposition" />
+          <NavigationProperty Name="Composition" Relationship="Self.UserFavoriteComposition" FromRole="User" ToRole="Composition" />
+          <NavigationProperty Name="MusicalGroup" Relationship="Self.UserFavoriteMusicalGroup" FromRole="User" ToRole="MusicalGroup" />
+        </EntityType>
+        <EntityType Name="UserDownloadedCompositions">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="composition_id" />
+            <PropertyRef Name="downloadDate" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="composition_id" Type="Int32" Nullable="false" />
+          <Property Name="downloadDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Composition" Relationship="Self.FK_UserDownloadedCompositions_Composition" FromRole="UserDownloadedCompositions" ToRole="Composition" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserDownloadedCompositions_User" FromRole="UserDownloadedCompositions" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserListenedComposition">
+          <Key>
+            <PropertyRef Name="composition_id" />
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="dateOfListening" />
+          </Key>
+          <Property Name="composition_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="dateOfListening" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Composition" Relationship="Self.FK_UserListenedComposition_Composition" FromRole="UserListenedComposition" ToRole="Composition" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserListenedComposition_User" FromRole="UserListenedComposition" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Album_AlbumStyle">
+          <End Role="AlbumStyle" Type="Self.AlbumStyle" Multiplicity="1" />
+          <End Role="Album" Type="Self.Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlbumStyle">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Album">
+              <PropertyRef Name="style_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Album_MusicalGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="1" />
+          <End Role="Album" Type="Self.Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Album">
+              <PropertyRef Name="musicalgroup_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Composition_Album">
+          <End Role="Album" Type="Self.Album" Multiplicity="1" />
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Album">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="album_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Composition_Language">
+          <End Role="Language" Type="Self.Language" Multiplicity="1" />
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Language">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Composition">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDownloadedCompositions_Composition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
+          <End Role="UserDownloadedCompositions" Type="Self.UserDownloadedCompositions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Composition">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserDownloadedCompositions">
+              <PropertyRef Name="composition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserListenedComposition_Composition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
+          <End Role="UserListenedComposition" Type="Self.UserListenedComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Composition">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserListenedComposition">
+              <PropertyRef Name="composition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Musician_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Musician" Type="Self.Musician" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Musician">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MusicalGroup_MusicalGroupType">
+          <End Role="MusicalGroupType" Type="Self.MusicalGroupType" Multiplicity="1" />
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroupType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MusicalGroup">
+              <PropertyRef Name="musicalgrouptype_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserDownloadedCompositions_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserDownloadedCompositions" Type="Self.UserDownloadedCompositions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserDownloadedCompositions">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserListenedComposition_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserListenedComposition" Type="Self.UserListenedComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserListenedComposition">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CompositionGenre">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <End Role="Genre" Type="Self.Genre" Multiplicity="*" />
+        </Association>
+        <Association Name="MusiciansInGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="*" />
+          <End Role="Musician" Type="Self.Musician" Multiplicity="*" />
+        </Association>
+        <Association Name="UserFavoriteComposition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+        </Association>
+        <Association Name="UserFavoriteMusicalGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="*" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="PortalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Album" EntityType="Self.Album" />
+          <EntitySet Name="AlbumStyle" EntityType="Self.AlbumStyle" />
+          <EntitySet Name="Composition" EntityType="Self.Composition" />
+          <EntitySet Name="Country" EntityType="Self.Country" />
+          <EntitySet Name="Genre" EntityType="Self.Genre" />
+          <EntitySet Name="Language" EntityType="Self.Language" />
+          <EntitySet Name="MusicalGroup" EntityType="Self.MusicalGroup" />
+          <EntitySet Name="MusicalGroupType" EntityType="Self.MusicalGroupType" />
+          <EntitySet Name="Musician" EntityType="Self.Musician" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="UserDownloadedCompositions" EntityType="Self.UserDownloadedCompositions" />
+          <EntitySet Name="UserListenedComposition" EntityType="Self.UserListenedComposition" />
+          <AssociationSet Name="FK_Album_AlbumStyle" Association="Self.FK_Album_AlbumStyle">
+            <End Role="AlbumStyle" EntitySet="AlbumStyle" />
+            <End Role="Album" EntitySet="Album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Album_MusicalGroup" Association="Self.FK_Album_MusicalGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="Album" EntitySet="Album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Composition_Album" Association="Self.FK_Composition_Album">
+            <End Role="Album" EntitySet="Album" />
+            <End Role="Composition" EntitySet="Composition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Composition_Language" Association="Self.FK_Composition_Language">
+            <End Role="Language" EntitySet="Language" />
+            <End Role="Composition" EntitySet="Composition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDownloadedCompositions_Composition" Association="Self.FK_UserDownloadedCompositions_Composition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="UserDownloadedCompositions" EntitySet="UserDownloadedCompositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserListenedComposition_Composition" Association="Self.FK_UserListenedComposition_Composition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="UserListenedComposition" EntitySet="UserListenedComposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Musician_Country" Association="Self.FK_Musician_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Musician" EntitySet="Musician" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MusicalGroup_MusicalGroupType" Association="Self.FK_MusicalGroup_MusicalGroupType">
+            <End Role="MusicalGroupType" EntitySet="MusicalGroupType" />
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserDownloadedCompositions_User" Association="Self.FK_UserDownloadedCompositions_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserDownloadedCompositions" EntitySet="UserDownloadedCompositions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserListenedComposition_User" Association="Self.FK_UserListenedComposition_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserListenedComposition" EntitySet="UserListenedComposition" />
+          </AssociationSet>
+          <AssociationSet Name="CompositionGenre" Association="Self.CompositionGenre">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="Genre" EntitySet="Genre" />
+          </AssociationSet>
+          <AssociationSet Name="MusiciansInGroup" Association="Self.MusiciansInGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="Musician" EntitySet="Musician" />
+          </AssociationSet>
+          <AssociationSet Name="UserFavoriteComposition" Association="Self.UserFavoriteComposition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="UserFavoriteMusicalGroup" Association="Self.UserFavoriteMusicalGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище MusicPortalModelContainer" CdmEntityContainer="PortalEntities">
+          <EntitySetMapping Name="Album">
+            <EntityTypeMapping TypeName="MusicPortalModel.Album">
+              <MappingFragment StoreEntitySet="Album">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="style_id" ColumnName="style_id" />
+                <ScalarProperty Name="releaseDate" ColumnName="releaseDate" />
+                <ScalarProperty Name="musicalgroup_id" ColumnName="musicalgroup_id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlbumStyle">
+            <EntityTypeMapping TypeName="MusicPortalModel.AlbumStyle">
+              <MappingFragment StoreEntitySet="AlbumStyle">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="style" ColumnName="style" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Composition">
+            <EntityTypeMapping TypeName="MusicPortalModel.Composition">
+              <MappingFragment StoreEntitySet="Composition">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="album_id" ColumnName="album_id" />
+                <ScalarProperty Name="language_id" ColumnName="language_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="MusicPortalModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="countryName" ColumnName="countryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genre">
+            <EntityTypeMapping TypeName="MusicPortalModel.Genre">
+              <MappingFragment StoreEntitySet="Genre">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="genreName" ColumnName="genreName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Language">
+            <EntityTypeMapping TypeName="MusicPortalModel.Language">
+              <MappingFragment StoreEntitySet="Language">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="languageName" ColumnName="languageName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MusicalGroup">
+            <EntityTypeMapping TypeName="MusicPortalModel.MusicalGroup">
+              <MappingFragment StoreEntitySet="MusicalGroup">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="groupName" ColumnName="groupName" />
+                <ScalarProperty Name="musicalgrouptype_id" ColumnName="musicalgrouptype_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MusicalGroupType">
+            <EntityTypeMapping TypeName="MusicPortalModel.MusicalGroupType">
+              <MappingFragment StoreEntitySet="MusicalGroupType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="groupType" ColumnName="groupType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Musician">
+            <EntityTypeMapping TypeName="MusicPortalModel.Musician">
+              <MappingFragment StoreEntitySet="Musician">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="surName" ColumnName="surName" />
+                <ScalarProperty Name="country_id" ColumnName="country_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="MusicPortalModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="role_name" ColumnName="role_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="MusicPortalModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nickname" ColumnName="nickname" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserDownloadedCompositions">
+            <EntityTypeMapping TypeName="MusicPortalModel.UserDownloadedCompositions">
+              <MappingFragment StoreEntitySet="UserDownloadedCompositions">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="composition_id" ColumnName="composition_id" />
+                <ScalarProperty Name="downloadDate" ColumnName="downloadDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserListenedComposition">
+            <EntityTypeMapping TypeName="MusicPortalModel.UserListenedComposition">
+              <MappingFragment StoreEntitySet="UserListenedComposition">
+                <ScalarProperty Name="composition_id" ColumnName="composition_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="dateOfListening" ColumnName="dateOfListening" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="CompositionGenre" TypeName="MusicPortalModel.CompositionGenre" StoreEntitySet="CompositionGenre">
+            <EndProperty Name="Composition">
+              <ScalarProperty Name="id" ColumnName="composition_id" />
+            </EndProperty>
+            <EndProperty Name="Genre">
+              <ScalarProperty Name="id" ColumnName="genre_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="MusiciansInGroup" TypeName="MusicPortalModel.MusiciansInGroup" StoreEntitySet="MusiciansInGroup">
+            <EndProperty Name="MusicalGroup">
+              <ScalarProperty Name="id" ColumnName="musicalgroup_id" />
+            </EndProperty>
+            <EndProperty Name="Musician">
+              <ScalarProperty Name="id" ColumnName="musician_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserFavoriteComposition" TypeName="MusicPortalModel.UserFavoriteComposition" StoreEntitySet="UserFavoriteComposition">
+            <EndProperty Name="Composition">
+              <ScalarProperty Name="id" ColumnName="composition_id" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="id" ColumnName="user_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserFavoriteMusicalGroup" TypeName="MusicPortalModel.UserFavoriteMusicalGroup" StoreEntitySet="UserFavoriteMusicalGroup">
+            <EndProperty Name="MusicalGroup">
+              <ScalarProperty Name="id" ColumnName="musicalgroup_id" />
+            </EndProperty>
+            <EndProperty Name="User">
+              <ScalarProperty Name="id" ColumnName="user_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,37 @@
+﻿@model MusicPortal.Models.vmEntities.UserVM
+
+@{
+    ViewBag.Title = "Авторизация";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.login, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.login, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.login, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", type = "password" } })
+            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Войти" class="btn btn-default btn-primary" />
+        </div>
+        <p>
+            @if (!String.IsNullOrEmpty(ViewBag.Error))
+            {
+                @Html.Label((string)(ViewBag.Error), new { @class = "alert alert-danger" })
+            }
+        </p>
+    </div>
+}
+

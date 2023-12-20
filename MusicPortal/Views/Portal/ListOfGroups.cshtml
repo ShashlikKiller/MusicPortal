@@ -1,0 +1,45 @@
+﻿@model List<MusicPortal.Models.dbEntities.MusicalGroup>
+@{
+    ViewBag.Title = "Группы";
+}
+
+<tbody>
+    @foreach (var group in Model)
+    {
+        <tr class="text-center">
+            <td>
+                @group.groupName
+                @*(@{Html.RenderAction("Prices"
+                       , new { group_id = group.id });})*@
+            </td>
+            @if (User.IsInRole("Participant"))
+            {
+                <td>
+                    <div class="btn addToCart btn-primary" data-guid="@group.id">
+                        <span>
+                            Купить
+                        </span>
+                    </div>
+                </td>
+            }
+            else if (User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.ActionLink("Изменить", "EditProduct", "IDZ"
+                      , new { groupID = group.id }, null)
+                </td>
+                <td>
+                    @Html.ActionLink("Удалить", "DeleteProduct", "IDZ"
+                      , new { groupID = group.id }, null)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.ActionLink("Купить", "Login")
+                </td>
+            }
+        </tr>
+    }
+</tbody>
+
