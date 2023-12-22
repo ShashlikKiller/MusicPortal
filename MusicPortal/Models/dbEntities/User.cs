@@ -24,7 +24,6 @@ namespace MusicPortal.Models.dbEntities
         }
     
         public int id { get; set; }
-        public string nickname { get; set; }
         public string login { get; set; }
         public string password { get; set; }
         public Nullable<int> role_id { get; set; }

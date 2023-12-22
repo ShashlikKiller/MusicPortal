@@ -32,8 +32,6 @@
           <Property Name="album_id" Type="int" Nullable="false" />
           <Property Name="language_id" Type="int" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "MusicPortal.dbo.CompositionGenre" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="CompositionGenre">
           <Key>
             <PropertyRef Name="genre_id" />
@@ -87,8 +85,6 @@
           <Property Name="surName" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="country_id" Type="int" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "MusicPortal.dbo.MusiciansInGroup" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="MusiciansInGroup">
           <Key>
             <PropertyRef Name="musicalgroup_id" />
@@ -109,25 +105,19 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nickname" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="login" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="role_id" Type="int" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserDownloadedCompositions" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="UserDownloadedCompositions">
           <Key>
             <PropertyRef Name="user_id" />
             <PropertyRef Name="composition_id" />
-            <PropertyRef Name="downloadDate" />
           </Key>
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="composition_id" Type="int" Nullable="false" />
           <Property Name="downloadDate" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserFavoriteComposition" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="UserFavoriteComposition">
           <Key>
             <PropertyRef Name="user_id" />
@@ -136,8 +126,6 @@
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="composition_id" Type="int" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserFavoriteMusicalGroup" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="UserFavoriteMusicalGroup">
           <Key>
             <PropertyRef Name="user_id" />
@@ -146,13 +134,10 @@
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="musicalgroup_id" Type="int" Nullable="false" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "MusicPortal.dbo.UserListenedComposition" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="UserListenedComposition">
           <Key>
             <PropertyRef Name="composition_id" />
             <PropertyRef Name="user_id" />
-            <PropertyRef Name="dateOfListening" />
           </Key>
           <Property Name="composition_id" Type="int" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
@@ -390,52 +375,20 @@
           <EntitySet Name="Album" EntityType="Self.Album" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AlbumStyle" EntityType="Self.AlbumStyle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Composition" EntityType="Self.Composition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompositionGenre" EntityType="Self.CompositionGenre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Language" EntityType="Self.Language" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MusicalGroup" EntityType="Self.MusicalGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MusicalGroupType" EntityType="Self.MusicalGroupType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Musician" EntityType="Self.Musician" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MusiciansInGroup" EntityType="Self.MusiciansInGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CompositionGenre" EntityType="Self.CompositionGenre" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [CompositionGenre].[genre_id] AS [genre_id], 
-    [CompositionGenre].[composition_id] AS [composition_id]
-    FROM [dbo].[CompositionGenre] AS [CompositionGenre]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="MusiciansInGroup" EntityType="Self.MusiciansInGroup" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [MusiciansInGroup].[musicalgroup_id] AS [musicalgroup_id], 
-    [MusiciansInGroup].[musician_id] AS [musician_id]
-    FROM [dbo].[MusiciansInGroup] AS [MusiciansInGroup]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="UserDownloadedCompositions" EntityType="Self.UserDownloadedCompositions" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [UserDownloadedCompositions].[user_id] AS [user_id], 
-    [UserDownloadedCompositions].[composition_id] AS [composition_id], 
-    [UserDownloadedCompositions].[downloadDate] AS [downloadDate]
-    FROM [dbo].[UserDownloadedCompositions] AS [UserDownloadedCompositions]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="UserFavoriteComposition" EntityType="Self.UserFavoriteComposition" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [UserFavoriteComposition].[user_id] AS [user_id], 
-    [UserFavoriteComposition].[composition_id] AS [composition_id]
-    FROM [dbo].[UserFavoriteComposition] AS [UserFavoriteComposition]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="UserFavoriteMusicalGroup" EntityType="Self.UserFavoriteMusicalGroup" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [UserFavoriteMusicalGroup].[user_id] AS [user_id], 
-    [UserFavoriteMusicalGroup].[musicalgroup_id] AS [musicalgroup_id]
-    FROM [dbo].[UserFavoriteMusicalGroup] AS [UserFavoriteMusicalGroup]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="UserListenedComposition" EntityType="Self.UserListenedComposition" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [UserListenedComposition].[composition_id] AS [composition_id], 
-    [UserListenedComposition].[user_id] AS [user_id], 
-    [UserListenedComposition].[dateOfListening] AS [dateOfListening]
-    FROM [dbo].[UserListenedComposition] AS [UserListenedComposition]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="UserDownloadedCompositions" EntityType="Self.UserDownloadedCompositions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserFavoriteComposition" EntityType="Self.UserFavoriteComposition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserFavoriteMusicalGroup" EntityType="Self.UserFavoriteMusicalGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserListenedComposition" EntityType="Self.UserListenedComposition" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Album_AlbumStyle" Association="Self.FK_Album_AlbumStyle">
             <End Role="AlbumStyle" EntitySet="AlbumStyle" />
             <End Role="Album" EntitySet="Album" />
@@ -623,7 +576,6 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nickname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="login" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="role_id" Type="Int32" />
@@ -637,7 +589,6 @@
           <Key>
             <PropertyRef Name="user_id" />
             <PropertyRef Name="composition_id" />
-            <PropertyRef Name="downloadDate" />
           </Key>
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="composition_id" Type="Int32" Nullable="false" />
@@ -649,7 +600,6 @@
           <Key>
             <PropertyRef Name="composition_id" />
             <PropertyRef Name="user_id" />
-            <PropertyRef Name="dateOfListening" />
           </Key>
           <Property Name="composition_id" Type="Int32" Nullable="false" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
@@ -979,7 +929,6 @@
             <EntityTypeMapping TypeName="MusicPortalModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="nickname" ColumnName="nickname" />
                 <ScalarProperty Name="login" ColumnName="login" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="role_id" ColumnName="role_id" />

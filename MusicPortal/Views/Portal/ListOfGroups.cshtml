@@ -3,43 +3,50 @@
     ViewBag.Title = "Группы";
 }
 
-<tbody>
-    @foreach (var group in Model)
+<table style="width:90%">
+    <tbody>
+        @foreach (var group in Model)
+        {
+            <tr class="text-center">
+                <td>
+                    @group.groupName
+                    @*(@{Html.RenderAction("Prices"
+            , new { group_id = group.id });})*@
+                </td>
+                @if (User.IsInRole("User"))
+                {
+                    <td>
+                        @Html.ActionLink("Посмотреть дискографию группы", "Login", "Portal")
+                    </td>
+                }
+                else if (User.Identity.Name == "root")
+                {
+                    <td>
+                        @Html.ActionLink("Изменить", "EditProduct", "Portal"
+                          , new { groupID = group.id }, null)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Удалить", "DeleteProduct", "Portal"
+                          , new { groupID = group.id }, null)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        Войдите, чтобы просматривать дискографию групп.
+                    </td>
+                    @*<td>
+                @Html.ActionLink("Посмотреть дискографию группы", "Login")
+            </td>*@
+                }
+            </tr>
+        }
+    </tbody>
+    @if (User.Identity.IsAuthenticated && User.Identity.Name == "root")
     {
-        <tr class="text-center">
-            <td>
-                @group.groupName
-                @*(@{Html.RenderAction("Prices"
-                       , new { group_id = group.id });})*@
-            </td>
-            @if (User.IsInRole("Participant"))
-            {
-                <td>
-                    <div class="btn addToCart btn-primary" data-guid="@group.id">
-                        <span>
-                            Купить
-                        </span>
-                    </div>
-                </td>
-            }
-            else if (User.IsInRole("Admin"))
-            {
-                <td>
-                    @Html.ActionLink("Изменить", "EditProduct", "IDZ"
-                      , new { groupID = group.id }, null)
-                </td>
-                <td>
-                    @Html.ActionLink("Удалить", "DeleteProduct", "IDZ"
-                      , new { groupID = group.id }, null)
-                </td>
-            }
-            else
-            {
-                <td>
-                    @Html.ActionLink("Купить", "Login")
-                </td>
-            }
-        </tr>
+        <tbody>
+            @Html.ActionLink("Добавить группу", "CreateGroup", "Portal", new { @class = "btn btn-defualt btn-primary" })
+        </tbody>
     }
-</tbody>
+</table>
 

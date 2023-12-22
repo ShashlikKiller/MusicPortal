@@ -189,7 +189,9 @@
     </Compile>
     <Compile Include="Models\vmEntities\AlbumVM.cs" />
     <Compile Include="Models\vmEntities\CompositionVM.cs" />
+    <Compile Include="Models\vmEntities\MusicalGroupVM.cs" />
     <Compile Include="Models\vmEntities\MusicianVM.cs" />
+    <Compile Include="Models\vmEntities\UserProfile.cs" />
     <Compile Include="Models\vmEntities\UserVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -263,6 +265,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Portal\ListOfGroups.cshtml" />
     <Content Include="Views\Portal\Login.cshtml" />
+    <Content Include="Views\Portal\UserProfile.cshtml" />
+    <Content Include="Views\Portal\CreateGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

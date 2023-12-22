@@ -1,12 +1,13 @@
-﻿using Microsoft.Ajax.Utilities;
-using MusicPortal.Models.dbEntities;
+﻿using MusicPortal.Models.dbEntities;
 using MusicPortal.Models.vmEntities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Web.Security;
+using System;
+using System.Web;
 
 namespace MusicPortal.Controllers
 {
@@ -53,7 +54,144 @@ namespace MusicPortal.Controllers
             return View(albumSongs);
         }
 
-        #region Авторизация
+        public List<MusicalGroupType> GroupTypes()
+        {
+            List<MusicalGroupType> grouptypes = new List<MusicalGroupType>();
+            using (var db = new PortalEntities())
+            {
+                foreach (var grouptype in db.MusicalGroupType)
+                {
+                    grouptypes.Add(grouptype);
+                }
+            }
+            return grouptypes;
+        }
+        public List<Genre> Genres()
+        {
+            List<Genre> genres = new List<Genre>();
+            using (var db = new PortalEntities())
+            {
+                foreach (var genre in db.Genre)
+                {
+                    genres.Add(genre);
+                }
+            }
+            return genres;
+        }
+
+        // Создание группы
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CreateGroup()
+        {
+            ViewBag.grouptypes = new SelectList(GroupTypes(), "id", "groupType");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CreateGroup(MusicalGroupVM newgroup)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var context = new PortalEntities())
+                {
+                    MusicalGroup band = new MusicalGroup()
+                    {
+                        id = 1, // whatever
+                        groupName = newgroup.groupName,
+                        musicalgrouptype_id = newgroup.musicalgrouptype_id
+                    };
+                    context.Entry(band).State = System.Data.Entity.EntityState.Added;
+                    //context.MusicalGroup.Add(band);
+                    context.SaveChanges();
+                }
+                return RedirectToAction("ListOfGroups");
+            }
+            ViewBag.grouptypes = new SelectList(GroupTypes(), "id", "groupType");
+            return View(newgroup);
+        }
+
+        // Личный кабинет пользователя
+        public ActionResult UserProfile()
+        {
+            List<Album> albums = new List<Album>();
+            string currentUserLogin = HttpContext.User.Identity.Name;
+            List<Composition> downloadedSongs = new List<Composition>();
+            List<Composition> listenedSongs = new List<Composition>();
+            //List<Group> favoriteGroups = new List<Group>();
+            User currentUser = new User();
+
+            using (var db = new PortalEntities())
+            {
+                albums = db.Album.ToList();
+                currentUser = db.User.Where(x => x.login == currentUserLogin).FirstOrDefault();
+
+                downloadedSongs = db.UserDownloadedCompositions
+                                    .Where(x => x.user_id == currentUser.id)
+                                    .Select(x => x.Composition)
+                                    .ToList();
+
+                listenedSongs = db.UserListenedComposition
+                                    .Where(x => x.user_id == currentUser.id)
+                                    .Select(x => x.Composition)
+                                    .ToList();
+
+                //favoriteGroups = db.Favorite
+                //                    .Where(x => x.user_id == currentUser.ID)
+                //                    .Select(x => x.Group)
+                //                    .ToList();
+            }
+            ViewBag.albums = albums;
+            UserProfile model = new UserProfile(downloadedSongs, listenedSongs);//, favoriteGroups);
+            return View(model);
+        }
+
+        // Удаление песни из списка любимых
+        // BIG WARNING
+        // Изменить с прослушенных на избранные!!! Когда таблица добавиться!!!!!!
+        // BIG WARNING
+        [HttpPost]
+        public void RemoveFromFavorites(int songId)
+        {
+            if (User.Identity.IsAuthenticated == false)
+            {
+                //return RedirectToAction("Login", "Portal");
+
+            }
+
+            string userLogin = User.Identity.Name;
+            using (var db = new PortalEntities())
+            {
+                /////
+                //var users = db.User.Include(a => a.MusicalGroup).ToList();
+                /////
+                var user = db.User.FirstOrDefault(u => u.login == userLogin);
+                if (user == null)
+                {
+                    //return HttpNotFound();
+                }
+
+                var favoriteSong = db.UserListenedComposition.FirstOrDefault(fs => fs.user_id == user.id && fs.composition_id == songId);
+                if (favoriteSong == null)
+                {
+                    //return HttpNotFound();
+                }
+
+                db.Entry(favoriteSong).State = System.Data.Entity.EntityState.Deleted;// UserListenedComposition.Remove(favoriteSong);
+                db.SaveChanges();
+            }
+            //return View();
+            RedirectToAction("UserProfile", "Portal");
+        }
+        //[HttpGet]
+        //public ActionResult RemoveFromFavorites()
+        //{
+
+        //}
+
+        #region Авторизация/Выход
         [AllowAnonymous]
         [HttpPost]
         public ActionResult Login(UserVM webUser)
@@ -96,6 +234,12 @@ namespace MusicPortal.Controllers
             }
             ViewBag.Error = "Пользователя с таким логином и паролем нет.";
             return View(webUser);
+        }
+
+        public ActionResult LogOut()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("ListOfGroups", "Portal");
         }
 
         [HttpGet]
