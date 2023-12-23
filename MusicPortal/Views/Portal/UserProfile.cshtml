@@ -3,86 +3,72 @@
 @{
     ViewBag.Title = "Личный кабинет пользователя";
     List<MusicPortal.Models.dbEntities.Album> albums = ViewBag.albums as List<MusicPortal.Models.dbEntities.Album>;
+    List<MusicPortal.Models.dbEntities.Language> languages = ViewBag.languages as List<MusicPortal.Models.dbEntities.Language>;
 }
 
-<table title="Прослушенные песни:" style="width:90%">
+<table title="Любимые песни" style="width:90%">
     <tr class="text-bg-light">
-        <td>ПРОСЛУШЕННЫЕ ПЕСНИ</td>
+        <td>ЛЮБИМЫЕ ПЕСНИ</td>
     </tr>
-    @if (Model.listenedSongs.Count() > 0)
+    @if (Model.favoriteSongs.Count() > 0)
     {
         <tbody>
-            @foreach (var composition in Model.listenedSongs)
+            @foreach (var composition in Model.favoriteSongs)
             {
-                <tr class="text-center">
-                    <td>
-                        @composition.name
-                        @*(@Html.RenderAction("RemoveFromFavorites"))
-                            new { composition_id = composition.id });})*@
-                    </td>
-
-                    @foreach (var a in albums.Where(p => p.id == composition.album_id))
-                    {
-                        <td>
-                            Продолжительность:  @composition.duration
-
-                            Альбом: @a.title
-                        </td>
-                    }
-
-                </tr>
-                @*<tr>
-                    @Html.ActionLink("Удалить", "RemoveFromFavorites", "Portal", new { songId = composition.id }, null)
-                </tr>*@
-            <td>
-                <div class="btn addToCart btn-primary" data-int="@composition.id">
+                    Html.RenderPartial("CompositionOverviewPartial", composition);
+                <div class="btn deleteSong btn-primary" data-int="@composition.id">
                     <span>
-                        УДАЛИТЬ!!!
+                        Удалить из избранного
                     </span>
                 </div>
-            </td>
-        }
+            }
             </tbody>
-        }
-        else
-        {
+    }
+    else
+    {
             <tr class="text-center">
                 <td>
                     Нет загруженных песен!
                 </td>
             </tr>
-        }
+    }
 </table>
 
 <table title="Скачанные песни:" style="width:90%">
     <tr class="text-bg-light">
-        <td>СКАЧАННЫЕ ПЕСНИ ПЕСНИ</td>
+        <td>СКАЧАННЫЕ ПЕСНИ</td>
     </tr>
     @if (Model.downloadedSongs.Count() > 0)
     {
         <tbody>
             @foreach (var composition in Model.downloadedSongs)
             {
-                <tr class="text-center">
-                    <td>
-                        @composition.name
-                        @*(@Html.RenderAction("Prices"))*@
-                        @*new { composition_id = composition.id });})*@
-                    </td>
-                    @foreach (var a in albums.Where(p => p.id == composition.album_id))
-                    {
-                        <td>
-                            Продолжительность:  @composition.duration
-                            
-                            Альбом: @a.title
-                        </td>
-                    }
-                </tr>
+                Html.RenderPartial("CompositionOverviewPartial", composition);
             }
         </tbody>
+
+    }
+    else
+    {
+        <tr class="text-center">
+            <td>
+                Нет загруженных песен!
+            </td>
+        </tr>
+    }
+</table>
+
+<table title="Прослушанные песни" style="width:90%">
+    <tr class="text-bg-light">
+        <td>ПРОСЛУШАННЫЕ ПЕСНИ</td>
+    </tr>
+    @if (Model.listenedSongs.Count() > 0)
+    {
         <tbody>
-            @*@Html.ActionLink("Купить", "BuySong", "MusicPortal")*@
-            @*//, new guid = Model.purchaseID, null)*@
+            @foreach (var composition in Model.listenedSongs)
+            {
+                Html.RenderPartial("CompositionOverviewPartial", composition);
+            }
         </tbody>
     }
     else
@@ -98,17 +84,17 @@
 <script>
     window.onload = function () {
 
-        var buttons = document.getElementsByClassName('addToCart');
+        var buttons = document.getElementsByClassName('deleteSong');
         console.log(buttons);
         for (let i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener("click", () => AddToCart(buttons[i].dataset.int));
+            buttons[i].addEventListener("click", () => DeleteSong(buttons[i].dataset.int));
         }
     }
-    function AddToCart(int)
+    function DeleteSong(int)
     {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("RemoveFromFavorites", "Portal")",
+            url: "@Url.Action("RemoveSongFromFavorites", "Portal")",
             data: {SongId: int},
             success: function (data) {
                 alert("Удалено");

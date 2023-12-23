@@ -196,6 +196,7 @@ namespace MusicPortal.Controllers
         public ActionResult UserProfile()
         {
             List<Album> albums = new List<Album>();
+            List<Language> languages = new List<Language>();
             string currentUserLogin = HttpContext.User.Identity.Name;
             List<Composition> downloadedSongs = new List<Composition>();
             List<Composition> listenedSongs = new List<Composition>();
@@ -206,6 +207,7 @@ namespace MusicPortal.Controllers
             using (var db = new PortalEntities())
             {
                 albums = db.Album.ToList();
+                languages = db.Language.ToList();
                 currentUser = db.User.Where(x => x.login == currentUserLogin).FirstOrDefault();
 
                 downloadedSongs = db.UserDownloadedCompositions
@@ -229,13 +231,14 @@ namespace MusicPortal.Controllers
                                    .ToList();
             }
             ViewBag.albums = albums;
-            UserProfile model = new UserProfile(downloadedSongs, listenedSongs, favoriteSongs, favoriteGroups);//, favoriteGroups);
+            ViewBag.languages = languages;
+            UserProfile model = new UserProfile(downloadedSongs, listenedSongs, favoriteSongs, favoriteGroups);
             return View(model);
         }
 
         // Удаление песни из списка любимых
         [HttpPost]
-        public void RemoveFromFavorites(int songId)
+        public void RemoveSongFromFavorites(int songId)
         {
             if (User.Identity.IsAuthenticated == false)
             {
@@ -259,6 +262,37 @@ namespace MusicPortal.Controllers
                 }
 
                 db.Entry(favoriteSong).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+            }
+            RedirectToAction("UserProfile", "Portal");
+        }
+
+        // Удаление группы из списка избранных
+        [HttpPost]
+        public void RemoveGroupFromFavorites(int groupID)
+        {
+            if (User.Identity.IsAuthenticated == false)
+            {
+                RedirectToAction("Login", "Portal");
+
+            }
+            string userLogin = User.Identity.Name;
+            using (var db = new PortalEntities())
+            {
+
+                var user = db.User.FirstOrDefault(u => u.login == userLogin);
+                if (user == null)
+                {
+                    HttpNotFound();
+                }
+
+                var favoriteGroup = db.UserFavoriteMusicalGroup.FirstOrDefault(fs => fs.user_id == user.id && fs.musicalgroup_id == groupID);
+                if (favoriteGroup == null)
+                {
+                    HttpNotFound();
+                }
+
+                db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
             RedirectToAction("UserProfile", "Portal");
