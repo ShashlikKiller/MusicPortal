@@ -10,8 +10,6 @@
             <tr class="text-center">
                 <td>
                     @group.groupName
-                    @*(@{Html.RenderAction("Prices"
-            , new { group_id = group.id });})*@
                 </td>
                 @if (User.IsInRole("User"))
                 {
@@ -26,7 +24,7 @@
                           , new { groupID = group.id }, null)
                     </td>
                     <td>
-                        @Html.ActionLink("Удалить", "DeleteProduct", "Portal"
+                        @Html.ActionLink("Удалить", "DeleteGroup", "Portal"
                           , new { groupID = group.id }, null)
                     </td>
                 }
@@ -35,9 +33,6 @@
                     <td>
                         Войдите, чтобы просматривать дискографию групп.
                     </td>
-                    @*<td>
-                @Html.ActionLink("Посмотреть дискографию группы", "Login")
-            </td>*@
                 }
             </tr>
         }

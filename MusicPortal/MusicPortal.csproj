@@ -277,6 +277,7 @@
     <Content Include="Views\Portal\UserProfile.cshtml" />
     <Content Include="Views\Portal\CreateGroup.cshtml" />
     <Content Include="Views\Portal\EditGroup.cshtml" />
+    <Content Include="Views\Portal\DeleteGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

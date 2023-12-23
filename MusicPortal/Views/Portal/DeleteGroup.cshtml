@@ -1,0 +1,42 @@
+﻿@model MusicPortal.Models.dbEntities.MusicalGroup
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DeleteGroup</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>MusicalGroupVM</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.groupName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.groupName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.musicalgrouptype_id)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.musicalgrouptype_id)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Назад в меню", "ListOfGroups")
+            </div>
+        }
+    </div>
+</body>
+</html>

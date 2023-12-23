@@ -154,6 +154,44 @@ namespace MusicPortal.Controllers
             return View(model);
         }
 
+        // Удаление группы
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteGroup(int groupID)
+        {
+            MusicalGroup groupToDelete;
+            using (var context = new PortalEntities())
+            {
+                groupToDelete = context.MusicalGroup.Find(groupID);
+            }
+            ViewBag.grouptypes = GroupTypes().First(x => x.id == groupToDelete.musicalgrouptype_id).groupType;
+            return View(groupToDelete);
+        }
+
+        // Подтвержденное удаление
+        [HttpPost, ActionName("DeleteGroup")]
+        public ActionResult DeleteConfirmed(int groupID)
+        {
+            using (var context = new PortalEntities())
+            {
+                MusicalGroup groupToDelete = new MusicalGroup
+                {
+                    id = groupID
+                };
+                foreach (var song in context.Composition.Where(x => x.Album.musicalgroup_id == groupToDelete.id))
+                {
+                    context.Entry(song).State = System.Data.Entity.EntityState.Deleted;
+                }
+                foreach (var album in context.Album.Where(x=>x.musicalgroup_id == groupToDelete.id))
+                {
+                    context.Entry(album).State = System.Data.Entity.EntityState.Deleted;
+                }
+                context.Entry(groupToDelete).State = System.Data.Entity.EntityState.Deleted;
+                context.SaveChanges();
+            }
+            return RedirectToAction("ListOfGroups");
+        }
+
         // Личный кабинет пользователя
         public ActionResult UserProfile()
         {
