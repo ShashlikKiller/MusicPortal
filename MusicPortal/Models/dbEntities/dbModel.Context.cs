@@ -34,9 +34,12 @@ namespace MusicPortal.Models.dbEntities
         public virtual DbSet<MusicalGroup> MusicalGroup { get; set; }
         public virtual DbSet<MusicalGroupType> MusicalGroupType { get; set; }
         public virtual DbSet<Musician> Musician { get; set; }
+        public virtual DbSet<MusiciansInGroup> MusiciansInGroup { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserDownloadedCompositions> UserDownloadedCompositions { get; set; }
+        public virtual DbSet<UserFavoriteComposition> UserFavoriteComposition { get; set; }
+        public virtual DbSet<UserFavoriteMusicalGroup> UserFavoriteMusicalGroup { get; set; }
         public virtual DbSet<UserListenedComposition> UserListenedComposition { get; set; }
     }
 }

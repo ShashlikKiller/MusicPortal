@@ -18,8 +18,8 @@ namespace MusicPortal.Models.dbEntities
         public MusicalGroup()
         {
             this.Album = new HashSet<Album>();
-            this.Musician = new HashSet<Musician>();
-            this.User = new HashSet<User>();
+            this.MusiciansInGroup = new HashSet<MusiciansInGroup>();
+            this.UserFavoriteMusicalGroup = new HashSet<UserFavoriteMusicalGroup>();
         }
     
         public int id { get; set; }
@@ -30,8 +30,8 @@ namespace MusicPortal.Models.dbEntities
         public virtual ICollection<Album> Album { get; set; }
         public virtual MusicalGroupType MusicalGroupType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Musician> Musician { get; set; }
+        public virtual ICollection<MusiciansInGroup> MusiciansInGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<UserFavoriteMusicalGroup> UserFavoriteMusicalGroup { get; set; }
     }
 }

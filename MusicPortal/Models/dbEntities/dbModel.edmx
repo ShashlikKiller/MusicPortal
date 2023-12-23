@@ -92,6 +92,7 @@
           </Key>
           <Property Name="musicalgroup_id" Type="int" Nullable="false" />
           <Property Name="musician_id" Type="int" Nullable="false" />
+          <Property Name="joinDate" Type="date" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -125,6 +126,7 @@
           </Key>
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="composition_id" Type="int" Nullable="false" />
+          <Property Name="likeDate" Type="datetime" />
         </EntityType>
         <EntityType Name="UserFavoriteMusicalGroup">
           <Key>
@@ -132,6 +134,7 @@
             <PropertyRef Name="musicalgroup_id" />
           </Key>
           <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="likeDate" Type="datetime" />
           <Property Name="musicalgroup_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserListenedComposition">
@@ -504,9 +507,9 @@
           <NavigationProperty Name="Album" Relationship="Self.FK_Composition_Album" FromRole="Composition" ToRole="Album" />
           <NavigationProperty Name="Language" Relationship="Self.FK_Composition_Language" FromRole="Composition" ToRole="Language" />
           <NavigationProperty Name="UserDownloadedCompositions" Relationship="Self.FK_UserDownloadedCompositions_Composition" FromRole="Composition" ToRole="UserDownloadedCompositions" />
+          <NavigationProperty Name="UserFavoriteComposition" Relationship="Self.FK_UserFavoriteComposition_Composition" FromRole="Composition" ToRole="UserFavoriteComposition" />
           <NavigationProperty Name="UserListenedComposition" Relationship="Self.FK_UserListenedComposition_Composition" FromRole="Composition" ToRole="UserListenedComposition" />
           <NavigationProperty Name="Genre" Relationship="Self.CompositionGenre" FromRole="Composition" ToRole="Genre" />
-          <NavigationProperty Name="User" Relationship="Self.UserFavoriteComposition" FromRole="Composition" ToRole="User" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -541,8 +544,8 @@
           <Property Name="musicalgrouptype_id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Album" Relationship="Self.FK_Album_MusicalGroup" FromRole="MusicalGroup" ToRole="Album" />
           <NavigationProperty Name="MusicalGroupType" Relationship="Self.FK_MusicalGroup_MusicalGroupType" FromRole="MusicalGroup" ToRole="MusicalGroupType" />
-          <NavigationProperty Name="Musician" Relationship="Self.MusiciansInGroup" FromRole="MusicalGroup" ToRole="Musician" />
-          <NavigationProperty Name="User" Relationship="Self.UserFavoriteMusicalGroup" FromRole="MusicalGroup" ToRole="User" />
+          <NavigationProperty Name="MusiciansInGroup" Relationship="Self.FK_MusiciansInGroup_MusicalGroup" FromRole="MusicalGroup" ToRole="MusiciansInGroup" />
+          <NavigationProperty Name="UserFavoriteMusicalGroup" Relationship="Self.FK_UserFavoriteMusician_MusicalGroup" FromRole="MusicalGroup" ToRole="UserFavoriteMusicalGroup" />
         </EntityType>
         <EntityType Name="MusicalGroupType">
           <Key>
@@ -561,7 +564,18 @@
           <Property Name="surName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="country_id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Country" Relationship="Self.FK_Musician_Country" FromRole="Musician" ToRole="Country" />
-          <NavigationProperty Name="MusicalGroup" Relationship="Self.MusiciansInGroup" FromRole="Musician" ToRole="MusicalGroup" />
+          <NavigationProperty Name="MusiciansInGroup" Relationship="Self.FK_MusiciansInGroup_Musician" FromRole="Musician" ToRole="MusiciansInGroup" />
+        </EntityType>
+        <EntityType Name="MusiciansInGroup">
+          <Key>
+            <PropertyRef Name="musicalgroup_id" />
+            <PropertyRef Name="musician_id" />
+          </Key>
+          <Property Name="musicalgroup_id" Type="Int32" Nullable="false" />
+          <Property Name="musician_id" Type="Int32" Nullable="false" />
+          <Property Name="joinDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="MusicalGroup" Relationship="Self.FK_MusiciansInGroup_MusicalGroup" FromRole="MusiciansInGroup" ToRole="MusicalGroup" />
+          <NavigationProperty Name="Musician" Relationship="Self.FK_MusiciansInGroup_Musician" FromRole="MusiciansInGroup" ToRole="Musician" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -581,9 +595,9 @@
           <Property Name="role_id" Type="Int32" />
           <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
           <NavigationProperty Name="UserDownloadedCompositions" Relationship="Self.FK_UserDownloadedCompositions_User" FromRole="User" ToRole="UserDownloadedCompositions" />
+          <NavigationProperty Name="UserFavoriteComposition" Relationship="Self.FK_UserFavoriteComposition_User" FromRole="User" ToRole="UserFavoriteComposition" />
+          <NavigationProperty Name="UserFavoriteMusicalGroup" Relationship="Self.FK_UserFavoriteMusician_User" FromRole="User" ToRole="UserFavoriteMusicalGroup" />
           <NavigationProperty Name="UserListenedComposition" Relationship="Self.FK_UserListenedComposition_User" FromRole="User" ToRole="UserListenedComposition" />
-          <NavigationProperty Name="Composition" Relationship="Self.UserFavoriteComposition" FromRole="User" ToRole="Composition" />
-          <NavigationProperty Name="MusicalGroup" Relationship="Self.UserFavoriteMusicalGroup" FromRole="User" ToRole="MusicalGroup" />
         </EntityType>
         <EntityType Name="UserDownloadedCompositions">
           <Key>
@@ -595,6 +609,28 @@
           <Property Name="downloadDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Composition" Relationship="Self.FK_UserDownloadedCompositions_Composition" FromRole="UserDownloadedCompositions" ToRole="Composition" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserDownloadedCompositions_User" FromRole="UserDownloadedCompositions" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserFavoriteComposition">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="composition_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="composition_id" Type="Int32" Nullable="false" />
+          <Property Name="likeDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Composition" Relationship="Self.FK_UserFavoriteComposition_Composition" FromRole="UserFavoriteComposition" ToRole="Composition" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserFavoriteComposition_User" FromRole="UserFavoriteComposition" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserFavoriteMusicalGroup">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="musicalgroup_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="likeDate" Type="DateTime" Precision="3" />
+          <Property Name="musicalgroup_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MusicalGroup" Relationship="Self.FK_UserFavoriteMusician_MusicalGroup" FromRole="UserFavoriteMusicalGroup" ToRole="MusicalGroup" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserFavoriteMusician_User" FromRole="UserFavoriteMusicalGroup" ToRole="User" />
         </EntityType>
         <EntityType Name="UserListenedComposition">
           <Key>
@@ -667,6 +703,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserFavoriteComposition_Composition">
+          <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
+          <End Role="UserFavoriteComposition" Type="Self.UserFavoriteComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Composition">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteComposition">
+              <PropertyRef Name="composition_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserListenedComposition_Composition">
           <End Role="Composition" Type="Self.Composition" Multiplicity="1" />
           <End Role="UserListenedComposition" Type="Self.UserListenedComposition" Multiplicity="*" />
@@ -703,6 +751,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MusiciansInGroup_MusicalGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="1" />
+          <End Role="MusiciansInGroup" Type="Self.MusiciansInGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MusiciansInGroup">
+              <PropertyRef Name="musicalgroup_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavoriteMusician_MusicalGroup">
+          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="1" />
+          <End Role="UserFavoriteMusicalGroup" Type="Self.UserFavoriteMusicalGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MusicalGroup">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteMusicalGroup">
+              <PropertyRef Name="musicalgroup_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MusiciansInGroup_Musician">
+          <End Role="Musician" Type="Self.Musician" Multiplicity="1" />
+          <End Role="MusiciansInGroup" Type="Self.MusiciansInGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musician">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MusiciansInGroup">
+              <PropertyRef Name="musician_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -727,6 +811,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserFavoriteComposition_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserFavoriteComposition" Type="Self.UserFavoriteComposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteComposition">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavoriteMusician_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserFavoriteMusicalGroup" Type="Self.UserFavoriteMusicalGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserFavoriteMusicalGroup">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserListenedComposition_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="UserListenedComposition" Type="Self.UserListenedComposition" Multiplicity="*" />
@@ -743,18 +851,6 @@
           <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
           <End Role="Genre" Type="Self.Genre" Multiplicity="*" />
         </Association>
-        <Association Name="MusiciansInGroup">
-          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="*" />
-          <End Role="Musician" Type="Self.Musician" Multiplicity="*" />
-        </Association>
-        <Association Name="UserFavoriteComposition">
-          <End Role="Composition" Type="Self.Composition" Multiplicity="*" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
-        </Association>
-        <Association Name="UserFavoriteMusicalGroup">
-          <End Role="MusicalGroup" Type="Self.MusicalGroup" Multiplicity="*" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="PortalEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Album" EntityType="Self.Album" />
           <EntitySet Name="AlbumStyle" EntityType="Self.AlbumStyle" />
@@ -765,9 +861,12 @@
           <EntitySet Name="MusicalGroup" EntityType="Self.MusicalGroup" />
           <EntitySet Name="MusicalGroupType" EntityType="Self.MusicalGroupType" />
           <EntitySet Name="Musician" EntityType="Self.Musician" />
+          <EntitySet Name="MusiciansInGroup" EntityType="Self.MusiciansInGroup" />
           <EntitySet Name="Role" EntityType="Self.Role" />
           <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="UserDownloadedCompositions" EntityType="Self.UserDownloadedCompositions" />
+          <EntitySet Name="UserFavoriteComposition" EntityType="Self.UserFavoriteComposition" />
+          <EntitySet Name="UserFavoriteMusicalGroup" EntityType="Self.UserFavoriteMusicalGroup" />
           <EntitySet Name="UserListenedComposition" EntityType="Self.UserListenedComposition" />
           <AssociationSet Name="FK_Album_AlbumStyle" Association="Self.FK_Album_AlbumStyle">
             <End Role="AlbumStyle" EntitySet="AlbumStyle" />
@@ -789,6 +888,10 @@
             <End Role="Composition" EntitySet="Composition" />
             <End Role="UserDownloadedCompositions" EntitySet="UserDownloadedCompositions" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteComposition_Composition" Association="Self.FK_UserFavoriteComposition_Composition">
+            <End Role="Composition" EntitySet="Composition" />
+            <End Role="UserFavoriteComposition" EntitySet="UserFavoriteComposition" />
+          </AssociationSet>
           <AssociationSet Name="FK_UserListenedComposition_Composition" Association="Self.FK_UserListenedComposition_Composition">
             <End Role="Composition" EntitySet="Composition" />
             <End Role="UserListenedComposition" EntitySet="UserListenedComposition" />
@@ -801,6 +904,18 @@
             <End Role="MusicalGroupType" EntitySet="MusicalGroupType" />
             <End Role="MusicalGroup" EntitySet="MusicalGroup" />
           </AssociationSet>
+          <AssociationSet Name="FK_MusiciansInGroup_MusicalGroup" Association="Self.FK_MusiciansInGroup_MusicalGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="MusiciansInGroup" EntitySet="MusiciansInGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteMusician_MusicalGroup" Association="Self.FK_UserFavoriteMusician_MusicalGroup">
+            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
+            <End Role="UserFavoriteMusicalGroup" EntitySet="UserFavoriteMusicalGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MusiciansInGroup_Musician" Association="Self.FK_MusiciansInGroup_Musician">
+            <End Role="Musician" EntitySet="Musician" />
+            <End Role="MusiciansInGroup" EntitySet="MusiciansInGroup" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
@@ -809,6 +924,14 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserDownloadedCompositions" EntitySet="UserDownloadedCompositions" />
           </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteComposition_User" Association="Self.FK_UserFavoriteComposition_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserFavoriteComposition" EntitySet="UserFavoriteComposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavoriteMusician_User" Association="Self.FK_UserFavoriteMusician_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserFavoriteMusicalGroup" EntitySet="UserFavoriteMusicalGroup" />
+          </AssociationSet>
           <AssociationSet Name="FK_UserListenedComposition_User" Association="Self.FK_UserListenedComposition_User">
             <End Role="User" EntitySet="User" />
             <End Role="UserListenedComposition" EntitySet="UserListenedComposition" />
@@ -816,18 +939,6 @@
           <AssociationSet Name="CompositionGenre" Association="Self.CompositionGenre">
             <End Role="Composition" EntitySet="Composition" />
             <End Role="Genre" EntitySet="Genre" />
-          </AssociationSet>
-          <AssociationSet Name="MusiciansInGroup" Association="Self.MusiciansInGroup">
-            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
-            <End Role="Musician" EntitySet="Musician" />
-          </AssociationSet>
-          <AssociationSet Name="UserFavoriteComposition" Association="Self.UserFavoriteComposition">
-            <End Role="Composition" EntitySet="Composition" />
-            <End Role="User" EntitySet="User" />
-          </AssociationSet>
-          <AssociationSet Name="UserFavoriteMusicalGroup" Association="Self.UserFavoriteMusicalGroup">
-            <End Role="MusicalGroup" EntitySet="MusicalGroup" />
-            <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -917,6 +1028,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MusiciansInGroup">
+            <EntityTypeMapping TypeName="MusicPortalModel.MusiciansInGroup">
+              <MappingFragment StoreEntitySet="MusiciansInGroup">
+                <ScalarProperty Name="musicalgroup_id" ColumnName="musicalgroup_id" />
+                <ScalarProperty Name="musician_id" ColumnName="musician_id" />
+                <ScalarProperty Name="joinDate" ColumnName="joinDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Role">
             <EntityTypeMapping TypeName="MusicPortalModel.Role">
               <MappingFragment StoreEntitySet="Role">
@@ -944,6 +1064,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserFavoriteComposition">
+            <EntityTypeMapping TypeName="MusicPortalModel.UserFavoriteComposition">
+              <MappingFragment StoreEntitySet="UserFavoriteComposition">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="composition_id" ColumnName="composition_id" />
+                <ScalarProperty Name="likeDate" ColumnName="likeDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserFavoriteMusicalGroup">
+            <EntityTypeMapping TypeName="MusicPortalModel.UserFavoriteMusicalGroup">
+              <MappingFragment StoreEntitySet="UserFavoriteMusicalGroup">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="likeDate" ColumnName="likeDate" />
+                <ScalarProperty Name="musicalgroup_id" ColumnName="musicalgroup_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="UserListenedComposition">
             <EntityTypeMapping TypeName="MusicPortalModel.UserListenedComposition">
               <MappingFragment StoreEntitySet="UserListenedComposition">
@@ -959,30 +1097,6 @@
             </EndProperty>
             <EndProperty Name="Genre">
               <ScalarProperty Name="id" ColumnName="genre_id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="MusiciansInGroup" TypeName="MusicPortalModel.MusiciansInGroup" StoreEntitySet="MusiciansInGroup">
-            <EndProperty Name="MusicalGroup">
-              <ScalarProperty Name="id" ColumnName="musicalgroup_id" />
-            </EndProperty>
-            <EndProperty Name="Musician">
-              <ScalarProperty Name="id" ColumnName="musician_id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="UserFavoriteComposition" TypeName="MusicPortalModel.UserFavoriteComposition" StoreEntitySet="UserFavoriteComposition">
-            <EndProperty Name="Composition">
-              <ScalarProperty Name="id" ColumnName="composition_id" />
-            </EndProperty>
-            <EndProperty Name="User">
-              <ScalarProperty Name="id" ColumnName="user_id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="UserFavoriteMusicalGroup" TypeName="MusicPortalModel.UserFavoriteMusicalGroup" StoreEntitySet="UserFavoriteMusicalGroup">
-            <EndProperty Name="MusicalGroup">
-              <ScalarProperty Name="id" ColumnName="musicalgroup_id" />
-            </EndProperty>
-            <EndProperty Name="User">
-              <ScalarProperty Name="id" ColumnName="user_id" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

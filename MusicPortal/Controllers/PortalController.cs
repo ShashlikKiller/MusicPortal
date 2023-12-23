@@ -113,6 +113,47 @@ namespace MusicPortal.Controllers
             return View(newgroup);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditGroup(int groupID)
+        {
+            MusicalGroupVM model;
+            using (var context = new PortalEntities())
+            {
+                MusicalGroup editedgroup = context.MusicalGroup.Find(groupID);
+                model = new MusicalGroupVM
+                {
+                    groupName = editedgroup.groupName,
+                    musicalgrouptype_id = editedgroup.musicalgrouptype_id,
+                };
+            }
+            ViewBag.grouptypes = new SelectList(GroupTypes(), "id", "groupType");
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult EditGroup(MusicalGroupVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var context = new PortalEntities())
+                {
+                    MusicalGroup editedGroup = new MusicalGroup
+                    {
+                        groupName = model.groupName,
+                        musicalgrouptype_id = model.musicalgrouptype_id,
+                    };
+                    context.MusicalGroup.Attach(editedGroup);
+                    context.Entry(editedGroup).State = System.Data.Entity.EntityState.Modified;
+                    context.SaveChanges();
+                }
+                return RedirectToAction("ListOfCategories");
+            }
+            ViewBag.grouptypes = new SelectList(GroupTypes(), "id", "groupType");
+            return View(model);
+        }
+
         // Личный кабинет пользователя
         public ActionResult UserProfile()
         {
@@ -120,7 +161,8 @@ namespace MusicPortal.Controllers
             string currentUserLogin = HttpContext.User.Identity.Name;
             List<Composition> downloadedSongs = new List<Composition>();
             List<Composition> listenedSongs = new List<Composition>();
-            //List<Group> favoriteGroups = new List<Group>();
+            List<Composition> favoriteSongs = new List<Composition>();
+            List<MusicalGroup> favoriteGroups = new List<MusicalGroup>();
             User currentUser = new User();
 
             using (var db = new PortalEntities())
@@ -138,58 +180,51 @@ namespace MusicPortal.Controllers
                                     .Select(x => x.Composition)
                                     .ToList();
 
-                //favoriteGroups = db.Favorite
-                //                    .Where(x => x.user_id == currentUser.ID)
-                //                    .Select(x => x.Group)
-                //                    .ToList();
+                favoriteGroups = db.UserFavoriteMusicalGroup
+                                    .Where(x => x.user_id == currentUser.id)
+                                    .Select(x => x.MusicalGroup)
+                                    .ToList();
+
+                favoriteSongs = db.UserFavoriteComposition
+                                   .Where(x => x.user_id == currentUser.id)
+                                   .Select(x => x.Composition)
+                                   .ToList();
             }
             ViewBag.albums = albums;
-            UserProfile model = new UserProfile(downloadedSongs, listenedSongs);//, favoriteGroups);
+            UserProfile model = new UserProfile(downloadedSongs, listenedSongs, favoriteSongs, favoriteGroups);//, favoriteGroups);
             return View(model);
         }
 
         // Удаление песни из списка любимых
-        // BIG WARNING
-        // Изменить с прослушенных на избранные!!! Когда таблица добавиться!!!!!!
-        // BIG WARNING
         [HttpPost]
         public void RemoveFromFavorites(int songId)
         {
             if (User.Identity.IsAuthenticated == false)
             {
-                //return RedirectToAction("Login", "Portal");
+                RedirectToAction("Login", "Portal");
 
             }
-
             string userLogin = User.Identity.Name;
             using (var db = new PortalEntities())
             {
-                /////
-                //var users = db.User.Include(a => a.MusicalGroup).ToList();
-                /////
+
                 var user = db.User.FirstOrDefault(u => u.login == userLogin);
                 if (user == null)
                 {
-                    //return HttpNotFound();
+                    HttpNotFound();
                 }
 
-                var favoriteSong = db.UserListenedComposition.FirstOrDefault(fs => fs.user_id == user.id && fs.composition_id == songId);
+                var favoriteSong = db.UserFavoriteComposition.FirstOrDefault(fs => fs.user_id == user.id && fs.composition_id == songId);
                 if (favoriteSong == null)
                 {
-                    //return HttpNotFound();
+                    HttpNotFound();
                 }
 
-                db.Entry(favoriteSong).State = System.Data.Entity.EntityState.Deleted;// UserListenedComposition.Remove(favoriteSong);
+                db.Entry(favoriteSong).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
-            //return View();
             RedirectToAction("UserProfile", "Portal");
         }
-        //[HttpGet]
-        //public ActionResult RemoveFromFavorites()
-        //{
-
-        //}
 
         #region Авторизация/Выход
         [AllowAnonymous]

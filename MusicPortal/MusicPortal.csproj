@@ -175,6 +175,9 @@
     <Compile Include="Models\dbEntities\Musician.cs">
       <DependentUpon>dbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\dbEntities\MusiciansInGroup.cs">
+      <DependentUpon>dbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\dbEntities\Role.cs">
       <DependentUpon>dbModel.tt</DependentUpon>
     </Compile>
@@ -182,6 +185,12 @@
       <DependentUpon>dbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\dbEntities\UserDownloadedCompositions.cs">
+      <DependentUpon>dbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dbEntities\UserFavoriteComposition.cs">
+      <DependentUpon>dbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dbEntities\UserFavoriteMusicalGroup.cs">
       <DependentUpon>dbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\dbEntities\UserListenedComposition.cs">
@@ -267,6 +276,7 @@
     <Content Include="Views\Portal\Login.cshtml" />
     <Content Include="Views\Portal\UserProfile.cshtml" />
     <Content Include="Views\Portal\CreateGroup.cshtml" />
+    <Content Include="Views\Portal\EditGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

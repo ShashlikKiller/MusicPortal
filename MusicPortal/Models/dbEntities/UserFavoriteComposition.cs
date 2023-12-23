@@ -12,21 +12,13 @@ namespace MusicPortal.Models.dbEntities
     using System;
     using System.Collections.Generic;
     
-    public partial class Musician
+    public partial class UserFavoriteComposition
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Musician()
-        {
-            this.MusiciansInGroup = new HashSet<MusiciansInGroup>();
-        }
+        public int user_id { get; set; }
+        public int composition_id { get; set; }
+        public Nullable<System.DateTime> likeDate { get; set; }
     
-        public int id { get; set; }
-        public string firstName { get; set; }
-        public string surName { get; set; }
-        public int country_id { get; set; }
-    
-        public virtual Country Country { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MusiciansInGroup> MusiciansInGroup { get; set; }
+        public virtual Composition Composition { get; set; }
+        public virtual User User { get; set; }
     }
 }

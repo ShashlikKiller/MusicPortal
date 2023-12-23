@@ -18,9 +18,9 @@ namespace MusicPortal.Models.dbEntities
         public Composition()
         {
             this.UserDownloadedCompositions = new HashSet<UserDownloadedCompositions>();
+            this.UserFavoriteComposition = new HashSet<UserFavoriteComposition>();
             this.UserListenedComposition = new HashSet<UserListenedComposition>();
             this.Genre = new HashSet<Genre>();
-            this.User = new HashSet<User>();
         }
     
         public int id { get; set; }
@@ -34,10 +34,10 @@ namespace MusicPortal.Models.dbEntities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserDownloadedCompositions> UserDownloadedCompositions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserFavoriteComposition> UserFavoriteComposition { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserListenedComposition> UserListenedComposition { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Genre> Genre { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> User { get; set; }
     }
 }
