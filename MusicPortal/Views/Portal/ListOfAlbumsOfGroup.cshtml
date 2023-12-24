@@ -1,0 +1,46 @@
+﻿@model List<MusicPortal.Models.dbEntities.Album>
+@{
+    ViewBag.Title = "Альбомы";
+}
+
+<table style="width:90%">
+    <tbody>
+        @foreach (var album in Model)
+        {
+            <tr class="text-center">
+                <td>
+                    @album.title
+                </td>
+                @if (User.IsInRole("User"))
+                {
+                    <td>
+                        @Html.ActionLink("Посмотреть песни альбома", "ListOfCompositionsInAlbum", "Portal", new { albumID = album.id }, null))
+                    </td>
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @Html.ActionLink("Изменить", "EditAlbum", "Portal"
+                          , new { albumID = album.id }, null)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Удалить", "DeleteAlbum", "Portal"
+                          , new { albumID = album.id }, null)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        Войдите, чтобы просматривать песни в группе.
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <tbody>
+            @Html.ActionLink("Добавить альбом", "CreateAlbum", "Portal", new { @class = "btn btn-defualt btn-primary" })
+        </tbody>
+    }
+</table>

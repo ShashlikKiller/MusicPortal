@@ -8,6 +8,8 @@ using System.Data.Entity.Infrastructure;
 using System.Web.Security;
 using System;
 using System.Web;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Text.RegularExpressions;
 
 namespace MusicPortal.Controllers
 {
@@ -30,27 +32,33 @@ namespace MusicPortal.Controllers
         }
 
         // Вывод всех альбомов группы
-        public ActionResult ListOfAlbumsOfGroup(int group_id)
+        public ActionResult ListOfAlbumsOfGroup(int groupID)
         {
             List<Album> Albums = new List<Album>();
             using (var db = new PortalEntities())
             {
-                Albums = db.Album.Where(x => x.musicalgroup_id == group_id).ToList();
+                Albums = db.Album.Where(x => x.musicalgroup_id == groupID).ToList();
             }
             return View(Albums);
         }
 
         // Вывод всех композиций в альбоме
-        public ActionResult ListOfCompositionsInAlbum(int album_id)
+        public ActionResult ListOfCompositionsInAlbum(int albumID)
         {
+            List<Album> albums = new List<Album>();
+            List<Language> languages = new List<Language>();
             List<Composition> albumSongs = new List<Composition>();
             using (var db = new PortalEntities())
             {
-                foreach (var composition in db.Composition.Where(x => x.album_id == album_id))
+                albums = db.Album.ToList();
+                languages = db.Language.ToList();
+                foreach (var composition in db.Composition.Where(x => x.album_id == albumID))
                 {
                     albumSongs.Add(composition);
                 }
             }
+            ViewBag.albums = albums;
+            ViewBag.languages = languages;
             return View(albumSongs);
         }
 
@@ -236,6 +244,49 @@ namespace MusicPortal.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public void AddGroupToFavorites(int groupID)
+        {
+            string userLogin = User.Identity.Name;
+            using (var db = new PortalEntities())
+            {
+                var user = db.User.FirstOrDefault(u => u.login == userLogin);
+                if (user == null)
+                {
+                    HttpNotFound();
+                }
+                UserFavoriteMusicalGroup favoriteGroup = new UserFavoriteMusicalGroup();
+                favoriteGroup.musicalgroup_id = groupID;
+                favoriteGroup.user_id = user.id;
+                favoriteGroup.likeDate = DateTime.Now;
+                db.UserFavoriteMusicalGroup.Add(favoriteGroup);
+                //db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Added;
+                db.SaveChanges();
+            }
+            RedirectToAction("ListOfGroups", "Portal");
+        }
+
+        [HttpPost]
+        public void AddFavoriteComposition(int compositionID)
+        {
+            string userLogin = User.Identity.Name;
+            using (var db = new PortalEntities())
+            {
+                var user = db.User.FirstOrDefault(u => u.login == userLogin);
+                if (user == null)
+                {
+                    HttpNotFound();
+                }
+                UserFavoriteComposition favoriteSong = new UserFavoriteComposition();
+                favoriteSong.composition_id = compositionID;
+                favoriteSong.user_id = user.id;
+                favoriteSong.likeDate = DateTime.Now;
+                db.UserFavoriteComposition.Add(favoriteSong);
+                //db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Added;
+                db.SaveChanges();
+            }
+            RedirectToAction("ListOfCompositionsInAlbum", "Portal");
+        }
         // Удаление песни из списка любимых
         [HttpPost]
         public void RemoveSongFromFavorites(int songId)

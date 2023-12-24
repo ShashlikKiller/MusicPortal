@@ -13,35 +13,65 @@
                 </td>
                 @if (User.IsInRole("User"))
                 {
+                <tr class="btn addFavoriteGroup btn-primary" data-int="@group.id">
                     <td>
-                        @Html.ActionLink("Посмотреть дискографию группы", "Login", "Portal")
+                        Добавить в избранное
                     </td>
-                }
-                else if (User.Identity.Name == "root")
+                </tr>
+            }
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <td>
-                        @Html.ActionLink("Изменить", "EditGroup", "Portal"
-                          , new { groupID = group.id }, null)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Удалить", "DeleteGroup", "Portal"
-                          , new { groupID = group.id }, null)
-                    </td>
+                <td>
+                    @Html.ActionLink("Посмотреть дискографию группы", "ListOfAlbumsOfGroup", "Portal", new { groupID = group.id }, null)
+                </td>
                 }
                 else
                 {
                     <td>
-                        Войдите, чтобы просматривать дискографию групп.
+                        Войдите, чтобы просматривать дискографию группы.
                     </td>
                 }
-            </tr>
-        }
-    </tbody>
-    @if (User.Identity.IsAuthenticated && User.Identity.Name == "root")
-    {
-        <tbody>
-            @Html.ActionLink("Добавить группу", "CreateGroup", "Portal", new { @class = "btn btn-defualt btn-primary" })
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.ActionLink("Изменить", "EditGroup", "Portal"
+                      , new { groupID = group.id }, null)
+                </td>
+                <td>
+                    @Html.ActionLink("Удалить", "DeleteGroup", "Portal"
+                      , new { groupID = group.id }, null)
+                </td>
+            }
+                </tr>
+            }
         </tbody>
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <tbody>
+                @Html.ActionLink("Добавить группу", "CreateGroup", "Portal", new { @class = "btn btn-defualt btn-primary" })
+            </tbody>
+        }
+    </table>
+
+<script>
+    window.onload = function () {
+
+        var buttons = document.getElementsByClassName('addFavoriteGroup');
+        console.log(buttons);
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", () => AddFavoriteGroup(buttons[i].dataset.int));
+        }
     }
-</table>
+    function AddFavoriteGroup(int)
+    {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddGroupToFavorites", "Portal")",
+            data: {groupID: int},
+            success: function (data) {
+                alert("Добавлено");
+            }
+        });
+    }
+</script>
 
