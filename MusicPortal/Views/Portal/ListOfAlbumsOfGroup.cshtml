@@ -7,25 +7,16 @@
     <tbody>
         @foreach (var album in Model)
         {
+            if (album.isValid == true || album.isValid == null)
+            {
             <tr class="text-center">
                 <td>
                     @album.title
                 </td>
-                @if (User.IsInRole("User"))
+                @if (User.Identity.IsAuthenticated)
                 {
                     <td>
                         @Html.ActionLink("Посмотреть песни альбома", "ListOfCompositionsInAlbum", "Portal", new { albumID = album.id }, null))
-                    </td>
-                }
-                else if (User.IsInRole("Admin"))
-                {
-                    <td>
-                        @Html.ActionLink("Изменить", "EditAlbum", "Portal"
-                          , new { albumID = album.id }, null)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Удалить", "DeleteAlbum", "Portal"
-                          , new { albumID = album.id }, null)
                     </td>
                 }
                 else
@@ -34,7 +25,19 @@
                         Войдите, чтобы просматривать песни в группе.
                     </td>
                 }
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <td>
+                        @Html.ActionLink("Изменить", "EditAlbum", "Portal"
+                                , new { albumID = album.id }, null)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Удалить", "DeleteAlbum", "Portal"
+                                , new { albumID = album.id }, null)
+                    </td>
+                }
             </tr>
+            }
         }
     </tbody>
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))

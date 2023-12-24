@@ -7,7 +7,9 @@
     <tbody>
         @foreach (var composition in Model)
         {
-            Html.RenderPartial("CompositionOverviewPartial", composition);
+            if (composition.isValid == true || composition.isValid == null)
+            {
+                Html.RenderPartial("CompositionOverviewPartial", composition);
             <tr class="text-center">
                 @if (User.IsInRole("User"))
                 {
@@ -16,32 +18,22 @@
                         Добавить в избранное
                     </td>
                 </tr>
-            }
-                @if (User.Identity.IsAuthenticated)
-                {
+                }
+        @if (User.Identity.IsAuthenticated)
+        {
                 @*<td>
                     @Html.ActionLink("Посмотреть дискографию группы", "ListOfAlbumsOfGroup", "Portal", new { compositionID = composition.id }, null)
                 </td>*@
-            }
-            else
-            {
+        }
+        else
+        {
                 <td>
                     Войдите, чтобы просматривать дискографию группы.
                 </td>
-            }
-                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
-                    <td>
-                        @Html.ActionLink("Изменить", "EditComposition", "Portal"
-                          , new { compositionID = composition.id }, null)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Удалить", "DeleteComposition", "Portal"
-                          , new { compositionID = composition.id }, null)
-                    </td>
-                }
+        }
                 </tr>
             }
+        }
         </tbody>
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
@@ -49,6 +41,7 @@
                 @Html.ActionLink("Добавить композицию", "CreateComposition", "Portal", new { @class = "btn btn-defualt btn-primary" })
             </tbody>
         }
+
     </table>
 
     <script>

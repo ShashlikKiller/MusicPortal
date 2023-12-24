@@ -7,6 +7,8 @@
     <tbody>
         @foreach (var group in Model)
         {
+            if (group.isValid == true || group.isValid == null)
+            {
             <tr class="text-center">
                 <td>
                     @group.groupName
@@ -18,7 +20,7 @@
                         Добавить в избранное
                     </td>
                 </tr>
-            }
+                }
                 @if (User.Identity.IsAuthenticated)
                 {
                 <td>
@@ -35,15 +37,16 @@
             {
                 <td>
                     @Html.ActionLink("Изменить", "EditGroup", "Portal"
-                      , new { groupID = group.id }, null)
+                           , new { groupID = group.id }, null)
                 </td>
                 <td>
                     @Html.ActionLink("Удалить", "DeleteGroup", "Portal"
-                      , new { groupID = group.id }, null)
+                           , new { groupID = group.id }, null)
                 </td>
             }
                 </tr>
             }
+        }
         </tbody>
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {

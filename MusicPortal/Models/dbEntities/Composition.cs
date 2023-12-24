@@ -28,6 +28,7 @@ namespace MusicPortal.Models.dbEntities
         public System.TimeSpan duration { get; set; }
         public int album_id { get; set; }
         public int language_id { get; set; }
+        public Nullable<bool> isValid { get; set; }
     
         public virtual Album Album { get; set; }
         public virtual Language Language { get; set; }

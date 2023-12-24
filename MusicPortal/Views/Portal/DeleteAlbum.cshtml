@@ -1,0 +1,50 @@
+﻿@model MusicPortal.Models.dbEntities.Album
+
+<h3>Вы точно хотите удалить этот альбом?</h3>
+<div>
+    <h4>Альбом:</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.style_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.style_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.releaseDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.releaseDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.musicalgroup_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.musicalgroup_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.title)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "ListOfAlbumsOfGroup")
+        </div>
+    }
+</div>

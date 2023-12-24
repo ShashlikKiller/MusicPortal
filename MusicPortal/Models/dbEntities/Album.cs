@@ -25,6 +25,7 @@ namespace MusicPortal.Models.dbEntities
         public System.DateTime releaseDate { get; set; }
         public int musicalgroup_id { get; set; }
         public string title { get; set; }
+        public Nullable<bool> isValid { get; set; }
     
         public virtual AlbumStyle AlbumStyle { get; set; }
         public virtual MusicalGroup MusicalGroup { get; set; }

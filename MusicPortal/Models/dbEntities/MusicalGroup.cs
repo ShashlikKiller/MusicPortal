@@ -25,6 +25,7 @@ namespace MusicPortal.Models.dbEntities
         public int id { get; set; }
         public string groupName { get; set; }
         public int musicalgrouptype_id { get; set; }
+        public Nullable<bool> isValid { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Album> Album { get; set; }

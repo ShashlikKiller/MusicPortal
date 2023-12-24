@@ -74,6 +74,20 @@ namespace MusicPortal.Controllers
             }
             return grouptypes;
         }
+
+        public List<AlbumStyle> AlbumStyles()
+        {
+            List<AlbumStyle> albumstyles = new List<AlbumStyle>();
+            using (var db = new PortalEntities())
+            {
+                foreach (var albumstyle in db.AlbumStyle)
+                {
+                    albumstyles.Add(albumstyle);
+                }
+            }
+            return albumstyles;
+        }
+
         public List<Genre> Genres()
         {
             List<Genre> genres = new List<Genre>();
@@ -188,16 +202,50 @@ namespace MusicPortal.Controllers
                 };
                 foreach (var song in context.Composition.Where(x => x.Album.musicalgroup_id == groupToDelete.id))
                 {
-                    context.Entry(song).State = System.Data.Entity.EntityState.Deleted;
+                    song.isValid = false;
                 }
                 foreach (var album in context.Album.Where(x=>x.musicalgroup_id == groupToDelete.id))
                 {
-                    context.Entry(album).State = System.Data.Entity.EntityState.Deleted;
+                    album.isValid = false;
                 }
-                context.Entry(groupToDelete).State = System.Data.Entity.EntityState.Deleted;
+                context.MusicalGroup.Where(a => a.id == groupToDelete.id).FirstOrDefault().isValid = false;
                 context.SaveChanges();
             }
             return RedirectToAction("ListOfGroups");
+        }
+
+        // Удаление альбома
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteAlbum(int albumID)
+        {
+            Album albumToDelete;
+            using (var context = new PortalEntities())
+            {
+                albumToDelete = context.Album.Find(albumID);
+            }
+            ViewBag.albumtypes = AlbumStyles().First(x => x.id == albumToDelete.style_id).style;
+            return View(albumToDelete);
+        }
+
+        [HttpPost, ActionName("DeleteAlbum")]
+        public ActionResult DeleteConfirmedAlbum(int albumID)
+        {
+            MusicalGroup thisgroup;
+            using (var context = new PortalEntities())
+            {
+                Album albumToDelete = context.Album.Where(a => a.id == albumID).FirstOrDefault();
+
+                foreach (var song in context.Composition.Where(x => x.Album.id == albumToDelete.id))
+                {
+                    context.Composition.Where(a => a.id == song.id).FirstOrDefault().isValid = false;
+                }
+                context.Album.Where(a => a.id == albumToDelete.id).FirstOrDefault().isValid = false;
+                context.SaveChanges();
+                thisgroup = context.MusicalGroup.Where(a => a.id == albumToDelete.musicalgroup_id).FirstOrDefault();
+            }
+            int groupID = thisgroup.id;
+            return RedirectToAction("ListOfAlbumsOfGroup", "Portal", new { groupID });
         }
 
         // Личный кабинет пользователя

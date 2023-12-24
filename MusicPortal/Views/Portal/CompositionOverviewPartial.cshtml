@@ -5,4 +5,16 @@
     <p>Продолжительность: @Model.duration</p>
     <p>Альбом: @Model.Album.title</p>
     <p>Язык: @Model.Language.languageName</p>
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <td>
+            @Html.ActionLink("Изменить", "EditComposition", "Portal"
+              , new { compositionID = Model.id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Удалить", "DeleteComposition", "Portal"
+              , new { compositionID = Model.id }, null)
+        </td>
+    }
 </div>

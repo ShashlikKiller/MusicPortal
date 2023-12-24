@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище MusicPortalModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище MusicPortalModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Album">
           <Key>
             <PropertyRef Name="id" />
@@ -14,6 +14,7 @@
           <Property Name="releaseDate" Type="date" Nullable="false" />
           <Property Name="musicalgroup_id" Type="int" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="isValid" Type="bit" />
         </EntityType>
         <EntityType Name="AlbumStyle">
           <Key>
@@ -31,6 +32,7 @@
           <Property Name="duration" Type="time" Precision="7" Nullable="false" />
           <Property Name="album_id" Type="int" Nullable="false" />
           <Property Name="language_id" Type="int" Nullable="false" />
+          <Property Name="isValid" Type="bit" />
         </EntityType>
         <EntityType Name="CompositionGenre">
           <Key>
@@ -68,6 +70,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="groupName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="musicalgrouptype_id" Type="int" Nullable="false" />
+          <Property Name="isValid" Type="bit" />
         </EntityType>
         <EntityType Name="MusicalGroupType">
           <Key>
@@ -469,8 +472,7 @@
             <End Role="UserListenedComposition" EntitySet="UserListenedComposition" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MusicPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -486,6 +488,7 @@
           <NavigationProperty Name="AlbumStyle" Relationship="Self.FK_Album_AlbumStyle" FromRole="Album" ToRole="AlbumStyle" />
           <NavigationProperty Name="MusicalGroup" Relationship="Self.FK_Album_MusicalGroup" FromRole="Album" ToRole="MusicalGroup" />
           <NavigationProperty Name="Composition" Relationship="Self.FK_Composition_Album" FromRole="Album" ToRole="Composition" />
+          <Property Name="isValid" Type="Boolean" />
         </EntityType>
         <EntityType Name="AlbumStyle">
           <Key>
@@ -510,6 +513,7 @@
           <NavigationProperty Name="UserFavoriteComposition" Relationship="Self.FK_UserFavoriteComposition_Composition" FromRole="Composition" ToRole="UserFavoriteComposition" />
           <NavigationProperty Name="UserListenedComposition" Relationship="Self.FK_UserListenedComposition_Composition" FromRole="Composition" ToRole="UserListenedComposition" />
           <NavigationProperty Name="Genre" Relationship="Self.CompositionGenre" FromRole="Composition" ToRole="Genre" />
+          <Property Name="isValid" Type="Boolean" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -546,6 +550,7 @@
           <NavigationProperty Name="MusicalGroupType" Relationship="Self.FK_MusicalGroup_MusicalGroupType" FromRole="MusicalGroup" ToRole="MusicalGroupType" />
           <NavigationProperty Name="MusiciansInGroup" Relationship="Self.FK_MusiciansInGroup_MusicalGroup" FromRole="MusicalGroup" ToRole="MusiciansInGroup" />
           <NavigationProperty Name="UserFavoriteMusicalGroup" Relationship="Self.FK_UserFavoriteMusician_MusicalGroup" FromRole="MusicalGroup" ToRole="UserFavoriteMusicalGroup" />
+          <Property Name="isValid" Type="Boolean" />
         </EntityType>
         <EntityType Name="MusicalGroupType">
           <Key>
@@ -950,6 +955,7 @@
           <EntitySetMapping Name="Album">
             <EntityTypeMapping TypeName="MusicPortalModel.Album">
               <MappingFragment StoreEntitySet="Album">
+                <ScalarProperty Name="isValid" ColumnName="isValid" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="style_id" ColumnName="style_id" />
                 <ScalarProperty Name="releaseDate" ColumnName="releaseDate" />
@@ -969,6 +975,7 @@
           <EntitySetMapping Name="Composition">
             <EntityTypeMapping TypeName="MusicPortalModel.Composition">
               <MappingFragment StoreEntitySet="Composition">
+                <ScalarProperty Name="isValid" ColumnName="isValid" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="duration" ColumnName="duration" />
@@ -1004,6 +1011,7 @@
           <EntitySetMapping Name="MusicalGroup">
             <EntityTypeMapping TypeName="MusicPortalModel.MusicalGroup">
               <MappingFragment StoreEntitySet="MusicalGroup">
+                <ScalarProperty Name="isValid" ColumnName="isValid" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="groupName" ColumnName="groupName" />
                 <ScalarProperty Name="musicalgrouptype_id" ColumnName="musicalgrouptype_id" />
