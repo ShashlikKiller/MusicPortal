@@ -86,6 +86,20 @@ namespace MusicPortal.Controllers
             return albumstyles;
         }
 
+        // Лист всех исполнителей-групп
+        public List<MusicalGroup> Groups()
+        {
+            List<MusicalGroup> groups = new List<MusicalGroup>();
+            using (var db = new PortalEntities())
+            {
+                foreach (var group in db.MusicalGroup)
+                {
+                    groups.Add(group);
+                }
+            }
+            return groups;
+        }
+
         // Лист жанров песни
         public List<Genre> Genres()
         {
@@ -291,6 +305,44 @@ namespace MusicPortal.Controllers
             }
             ViewBag.albumstyles = new SelectList(AlbumStyles(), "id", "albumStyle");
             return View(model);
+        }
+
+        // Создание альбома
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CreateAlbum(int id)
+        {
+            ViewBag.albumtypes = new SelectList(AlbumStyles(), "id", "style");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CreateAlbum(AlbumVM newalbum, int id)
+        {
+            int groupID = id;
+            if (ModelState.IsValid)
+            {
+                using (var context = new PortalEntities())
+                {
+                    Album album = new Album()
+                    {
+                        id = 1, // whatever
+                        title = newalbum.title,
+                        style_id = newalbum.style_id,
+                        musicalgroup_id = groupID
+                    };
+                    context.Entry(album).State = System.Data.Entity.EntityState.Added;
+                    //context.MusicalGroup.Add(band);
+                    context.SaveChanges();
+                    groupID = album.musicalgroup_id;
+                }
+               
+                return RedirectToAction("ListOfAlbumsOfGroup", "Portal", new { groupID });
+            }
+            ViewBag.albumtypes = new SelectList(AlbumStyles(), "id", "style");
+            return View(newalbum);
         }
 
         // Изменение композиции

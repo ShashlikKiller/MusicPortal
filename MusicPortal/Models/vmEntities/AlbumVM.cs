@@ -19,6 +19,8 @@ namespace MusicPortal.Models.vmEntities
         [Required]
         [DisplayName("Стиль альбома")]
         public int style_id { get; set; }
+        [DisplayName("Исполнитель")]
+        public int musicalgroup_id { get; set; }
 
 
     }

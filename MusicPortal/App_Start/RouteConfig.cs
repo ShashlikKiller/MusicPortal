@@ -14,6 +14,12 @@ namespace MusicPortal
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Default2",
+                url: "groups/{id}/create",
+                defaults: new { controller = "Portal", action = "CreateAlbum", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Portal", action = "ListOfGroups", id = UrlParameter.Optional }

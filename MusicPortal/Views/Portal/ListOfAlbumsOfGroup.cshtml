@@ -43,7 +43,7 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         <tbody>
-            @Html.ActionLink("Добавить альбом", "CreateAlbum", "Portal", new { @class = "btn btn-defualt btn-primary" })
+            @Html.ActionLink("Добавить альбом", "CreateAlbum", new { id = Request.Params["groupID"] }, new { @class = "btn btn-defualt btn-primary" })
         </tbody>
     }
 </table>
