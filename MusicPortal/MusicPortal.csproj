@@ -282,6 +282,7 @@
     <Content Include="Views\Portal\ListOfAlbumsOfGroup.cshtml" />
     <Content Include="Views\Portal\ListOfCompositionsInAlbum.cshtml" />
     <Content Include="Views\Portal\DeleteAlbum.cshtml" />
+    <Content Include="Views\Portal\EditAlbum.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

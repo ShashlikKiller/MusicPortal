@@ -15,10 +15,6 @@ namespace MusicPortal.Controllers
 {
     public class PortalController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
 
         // Вывод всех музыкальных групп
         public ActionResult ListOfGroups()
@@ -62,6 +58,7 @@ namespace MusicPortal.Controllers
             return View(albumSongs);
         }
 
+        // Лист видов группы (соло-исполнитель, группа, ансамбль и т.д.)
         public List<MusicalGroupType> GroupTypes()
         {
             List<MusicalGroupType> grouptypes = new List<MusicalGroupType>();
@@ -75,6 +72,7 @@ namespace MusicPortal.Controllers
             return grouptypes;
         }
 
+        // Лист видов альбома (сингл, сборник, ЕР и т.д.)
         public List<AlbumStyle> AlbumStyles()
         {
             List<AlbumStyle> albumstyles = new List<AlbumStyle>();
@@ -88,6 +86,7 @@ namespace MusicPortal.Controllers
             return albumstyles;
         }
 
+        // Лист жанров песни
         public List<Genre> Genres()
         {
             List<Genre> genres = new List<Genre>();
@@ -135,6 +134,7 @@ namespace MusicPortal.Controllers
             return View(newgroup);
         }
 
+        // Изменение группы
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public ActionResult EditGroup(int groupID)
@@ -145,6 +145,7 @@ namespace MusicPortal.Controllers
                 MusicalGroup editedgroup = context.MusicalGroup.Find(groupID);
                 model = new MusicalGroupVM
                 {
+                    id = groupID,
                     groupName = editedgroup.groupName,
                     musicalgrouptype_id = editedgroup.musicalgrouptype_id,
                 };
@@ -163,6 +164,7 @@ namespace MusicPortal.Controllers
                 {
                     MusicalGroup editedGroup = new MusicalGroup
                     {
+                        id = model.id,
                         groupName = model.groupName,
                         musicalgrouptype_id = model.musicalgrouptype_id,
                     };
@@ -170,7 +172,7 @@ namespace MusicPortal.Controllers
                     context.Entry(editedGroup).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
                 }
-                return RedirectToAction("ListOfCategories");
+                return RedirectToAction("ListOfGroups");
             }
             ViewBag.grouptypes = new SelectList(GroupTypes(), "id", "groupType");
             return View(model);
@@ -246,6 +248,49 @@ namespace MusicPortal.Controllers
             }
             int groupID = thisgroup.id;
             return RedirectToAction("ListOfAlbumsOfGroup", "Portal", new { groupID });
+        }
+
+        // Изменение альбома
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditAlbum(int albumID)
+        {
+            AlbumVM model;
+            using (var context = new PortalEntities())
+            {
+                Album editedalbum = context.Album.Find(albumID);
+                model = new AlbumVM
+                {
+                    album_id = albumID,
+                    title = editedalbum.title,
+                    releaseDate = editedalbum.releaseDate,
+                    style_id = editedalbum.style_id
+                };
+            }
+            ViewBag.albumstyles = new SelectList(AlbumStyles(), "id", "albumStyle");
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult EditAlbum(AlbumVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var context = new PortalEntities())
+                {
+                    Album editedAlbum = context.Album.Find(model.album_id);
+                    editedAlbum.title = model.title;
+                    editedAlbum.style_id = model.style_id;
+                    editedAlbum.releaseDate = model.releaseDate;
+                    context.SaveChanges();
+                    MusicalGroup thisgroup = context.MusicalGroup.Find(editedAlbum.musicalgroup_id);
+                    int groupID = thisgroup.id;
+                    return RedirectToAction("ListOfAlbumsOfGroup", "Portal", new { groupID });
+                }
+            }
+            ViewBag.albumstyles = new SelectList(AlbumStyles(), "id", "albumStyle");
+            return View(model);
         }
 
         // Личный кабинет пользователя

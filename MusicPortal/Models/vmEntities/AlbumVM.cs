@@ -16,6 +16,9 @@ namespace MusicPortal.Models.vmEntities
         [Required]
         [DisplayName("Дата выхода")]
         public DateTime releaseDate { get; set; }
+        [Required]
+        [DisplayName("Стиль альбома")]
+        public int style_id { get; set; }
 
 
     }
