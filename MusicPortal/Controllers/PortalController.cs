@@ -260,7 +260,6 @@ namespace MusicPortal.Controllers
                 favoriteGroup.user_id = user.id;
                 favoriteGroup.likeDate = DateTime.Now;
                 db.UserFavoriteMusicalGroup.Add(favoriteGroup);
-                //db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Added;
                 db.SaveChanges();
             }
             RedirectToAction("ListOfGroups", "Portal");
