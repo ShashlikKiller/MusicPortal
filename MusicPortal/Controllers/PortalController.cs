@@ -261,7 +261,7 @@ namespace MusicPortal.Controllers
                 Album editedalbum = context.Album.Find(albumID);
                 model = new AlbumVM
                 {
-                    album_id = albumID,
+                    //album_id = albumID,
                     title = editedalbum.title,
                     releaseDate = editedalbum.releaseDate,
                     style_id = editedalbum.style_id
@@ -290,6 +290,45 @@ namespace MusicPortal.Controllers
                 }
             }
             ViewBag.albumstyles = new SelectList(AlbumStyles(), "id", "albumStyle");
+            return View(model);
+        }
+
+        // Изменение композиции
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditSong(int songID)
+        {
+            CompositionVM model;
+            using (var context = new PortalEntities())
+            {
+                Composition editedsong = context.Composition.Find(songID);
+                model = new CompositionVM
+                {
+                    composition_id = songID,
+                    name = editedsong.name,
+                    duration = editedsong.duration
+                };
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult EditSong(CompositionVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var context = new PortalEntities())
+                {
+                    Composition editedComposition = context.Composition.Find(model.composition_id);
+                    editedComposition.name = model.name;
+                    editedComposition.duration = model.duration;
+                    context.SaveChanges();
+                    Album thisalbum = context.Album.Find(editedComposition.album_id);
+                    int albumID = thisalbum.id;
+                    return RedirectToAction("ListOfCompositionsInAlbum", "Portal", new { albumID });
+                }
+            }
             return View(model);
         }
 

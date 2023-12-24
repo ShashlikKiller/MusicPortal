@@ -9,12 +9,12 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         <td>
-            @Html.ActionLink("Изменить", "EditComposition", "Portal"
-              , new { compositionID = Model.id }, null)
+            @Html.ActionLink("Изменить", "EditSong", "Portal"
+              , new { songID = Model.id }, null)
         </td>
         <td>
             @Html.ActionLink("Удалить", "DeleteComposition", "Portal"
-              , new { compositionID = Model.id }, null)
+              , new { songID = Model.id }, null)
         </td>
     }
 </div>
