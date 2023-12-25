@@ -1,0 +1,50 @@
+﻿@model MusicPortal.Models.dbEntities.Composition
+
+<h3>Вы уверены что вы хотите удалить эту песню?</h3>
+<div>
+    <h4>Композиция</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.duration)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.duration)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.album_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.album_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.language_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.language_id)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Назад в меню", "ListOfGroups")
+        </div>
+    }
+</div>

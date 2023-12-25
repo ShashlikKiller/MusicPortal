@@ -114,6 +114,20 @@ namespace MusicPortal.Controllers
             return genres;
         }
 
+        // Лист языков исполнения
+        public List<Language> Languages()
+        {
+            List<Language> languages = new List<Language>();
+            using (var db = new PortalEntities())
+            {
+                foreach (var language in db.Language)
+                {
+                    languages.Add(language);
+                }
+            }
+            return languages;
+        }
+
         // Создание группы
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -382,6 +396,35 @@ namespace MusicPortal.Controllers
                 }
             }
             return View(model);
+        }
+
+        // Удалить композицию
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteSong(int songID)
+        {
+            Composition songToDelete;
+            using (var context = new PortalEntities())
+            {
+                songToDelete = context.Composition.Find(songID);
+            }
+            ViewBag.languages = Languages().FirstOrDefault(x => x.id == songToDelete.language_id).languageName;//AlbumStyles().First(x => x.id == albumToDelete.style_id).style;
+            return View(songToDelete);
+        }
+
+        [HttpPost, ActionName("DeleteSong")]
+        public ActionResult DeleteConfirmedSong(int songID)
+        {
+            Album thisalbum;
+            using (var context = new PortalEntities())
+            {
+                Composition songToDelete = context.Composition.Where(a => a.id == songID).FirstOrDefault();
+                context.Composition.Where(a => a.id == songID).FirstOrDefault().isValid = false;
+                context.SaveChanges();
+                thisalbum = context.Album.Where(a => a.id == songToDelete.album_id).FirstOrDefault();
+            }
+            int albumID = thisalbum.id;
+            return RedirectToAction("ListOfCompositionsInAlbum", "Portal", new { albumID });
         }
 
         // Личный кабинет пользователя

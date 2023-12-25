@@ -285,6 +285,7 @@
     <Content Include="Views\Portal\EditAlbum.cshtml" />
     <Content Include="Views\Portal\EditSong.cshtml" />
     <Content Include="Views\Portal\CreateAlbum.cshtml" />
+    <Content Include="Views\Portal\DeleteSong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
