@@ -13,10 +13,17 @@ namespace MusicPortal
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Создание альбома
             routes.MapRoute(
-                name: "Default2",
+                name: "CreateAlbum",
                 url: "groups/{id}/create",
                 defaults: new { controller = "Portal", action = "CreateAlbum", id = UrlParameter.Optional }
+            );
+            // Создание песни
+            routes.MapRoute(
+                name: "CreateSong",
+                url: "songs/{id}/create",
+                defaults: new { controller = "Portal", action = "CreateSong", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(

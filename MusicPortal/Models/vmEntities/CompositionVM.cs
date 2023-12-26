@@ -16,5 +16,8 @@ namespace MusicPortal.Models.vmEntities
         [Required]
         [DisplayName("Продолжительность композиции")]
         public TimeSpan duration { get; set; }
+        [Required]
+        [DisplayName("Язык")]
+        public int language_id {  get; set; }
     }
 }

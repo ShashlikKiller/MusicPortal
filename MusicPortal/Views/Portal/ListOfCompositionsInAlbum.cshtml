@@ -38,7 +38,7 @@
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
             <tbody>
-                @Html.ActionLink("Добавить композицию", "CreateComposition", "Portal", new { @class = "btn btn-defualt btn-primary" })
+                @Html.ActionLink("Добавить композицию", "CreateSong", new { id = Request.Params["albumID"] }, new { @class = "btn btn-defualt btn-primary" })
             </tbody>
         }
 

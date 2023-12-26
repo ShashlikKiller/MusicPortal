@@ -427,6 +427,45 @@ namespace MusicPortal.Controllers
             return RedirectToAction("ListOfCompositionsInAlbum", "Portal", new { albumID });
         }
 
+        // Создание композиции
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CreateSong(int id)
+        {
+            ViewBag.languages = new SelectList(Languages(), "id", "languageName");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult CreateSong(CompositionVM newsong, int id)
+        {
+            int albumID = id;
+            if (ModelState.IsValid)
+            {
+                using (var context = new PortalEntities())
+                {
+                    Composition song = new Composition()
+                    {
+                        id = 1, // whatever
+                        name = newsong.name,
+                        duration = newsong.duration,
+                        language_id = newsong.language_id,
+                        album_id = albumID,
+                        isValid = true
+                    };
+                    context.Entry(song).State = System.Data.Entity.EntityState.Added;
+                    //context.MusicalGroup.Add(band);
+                    context.SaveChanges();
+                }
+
+                return RedirectToAction("ListOfCompositionsInAlbum", "Portal", new { albumID });
+            }
+            ViewBag.albumtypes = new SelectList(AlbumStyles(), "id", "style");
+            return View(newsong);
+        }
+
         // Личный кабинет пользователя
         public ActionResult UserProfile()
         {
