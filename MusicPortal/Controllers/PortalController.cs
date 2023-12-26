@@ -572,7 +572,6 @@ namespace MusicPortal.Controllers
                 listenedSong.user_id = user.id;
                 listenedSong.dateOfListening = DateTime.Now;
                 db.UserListenedComposition.Add(listenedSong);
-                //db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Added;
                 db.SaveChanges();
             }
             RedirectToAction("ListOfCompositionsInAlbum", "Portal");
