@@ -510,6 +510,7 @@ namespace MusicPortal.Controllers
             return View(model);
         }
 
+        // Добавить группу в избранное
         [HttpPost]
         public void AddGroupToFavorites(int groupID)
         {
@@ -531,6 +532,7 @@ namespace MusicPortal.Controllers
             RedirectToAction("ListOfGroups", "Portal");
         }
 
+        // Добавить песню в избранное
         [HttpPost]
         public void AddFavoriteComposition(int compositionID)
         {
@@ -552,6 +554,30 @@ namespace MusicPortal.Controllers
             }
             RedirectToAction("ListOfCompositionsInAlbum", "Portal");
         }
+
+        // Прослушать песню
+        [HttpPost]
+        public void ListenComposition(int compositionID)
+        {
+            string userLogin = User.Identity.Name;
+            using (var db = new PortalEntities())
+            {
+                var user = db.User.FirstOrDefault(u => u.login == userLogin);
+                if (user == null)
+                {
+                    HttpNotFound();
+                }
+                UserListenedComposition listenedSong = new UserListenedComposition();
+                listenedSong.composition_id = compositionID;
+                listenedSong.user_id = user.id;
+                listenedSong.dateOfListening = DateTime.Now;
+                db.UserListenedComposition.Add(listenedSong);
+                //db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Added;
+                db.SaveChanges();
+            }
+            RedirectToAction("ListOfCompositionsInAlbum", "Portal");
+        }
+
         // Удаление песни из списка любимых
         [HttpPost]
         public void RemoveSongFromFavorites(int songId)

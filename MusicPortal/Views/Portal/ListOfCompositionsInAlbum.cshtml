@@ -10,28 +10,6 @@
             if (composition.isValid == true || composition.isValid == null)
             {
                 Html.RenderPartial("CompositionOverviewPartial", composition);
-            <tr class="text-center">
-                @if (User.IsInRole("User"))
-                {
-                <tr class="btn addFavoriteComposition btn-primary" data-int="@composition.id">
-                    <td>
-                        Добавить в избранное
-                    </td>
-                </tr>
-                }
-        @if (User.Identity.IsAuthenticated)
-        {
-                @*<td>
-                    @Html.ActionLink("Посмотреть дискографию группы", "ListOfAlbumsOfGroup", "Portal", new { compositionID = composition.id }, null)
-                </td>*@
-        }
-        else
-        {
-                <td>
-                    Войдите, чтобы просматривать дискографию группы.
-                </td>
-        }
-                </tr>
             }
         }
         </tbody>
@@ -43,26 +21,4 @@
         }
 
     </table>
-
-    <script>
-    window.onload = function () {
-
-        var buttons = document.getElementsByClassName('addFavoriteComposition');
-        console.log(buttons);
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener("click", () => AddFavoriteComposition(buttons[i].dataset.int));
-        }
-    }
-        function AddFavoriteComposition(int)
-    {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("AddFavoriteComposition", "Portal")",
-            data: {compositionID: int},
-            success: function (data) {
-                alert("Добавлено в избранное");
-            }
-        });
-    }
-    </script>
 
