@@ -1,10 +1,8 @@
 ﻿@model MusicPortal.Models.dbEntities.Composition
 
 <div>
-    <h2>@Model.name</h2>
-    <p>Продолжительность: @Model.duration</p>
-    <p>Альбом: @Model.Album.title</p>
-    <p>Язык: @Model.Language.languageName</p>
-
-   
+<h2>@Model.name</h2>
+<p style="display: inline-block; margin-right: 20px;">@Model.duration Продолжительность</p>
+<p style="display: inline-block; margin-right: 20px;">@Model.Album.title Альбом</p>
+<p style="display: inline-block;">@Model.Language.languageName Язык</p>
 </div>

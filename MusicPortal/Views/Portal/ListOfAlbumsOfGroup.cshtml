@@ -1,49 +1,55 @@
 ﻿@model List<MusicPortal.Models.dbEntities.Album>
-@{
+@{ 
     ViewBag.Title = "Альбомы";
 }
 
-<table style="width:90%">
-    <tbody>
-        @foreach (var album in Model)
-        {
-            if (album.isValid == true || album.isValid == null)
-            {
-            <tr class="text-center">
-                <td>
-                    @album.title
-                </td>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <td>
-                        @Html.ActionLink("Посмотреть песни альбома", "ListOfCompositionsInAlbum", "Portal", new { albumID = album.id }, null))
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        Войдите, чтобы просматривать песни в группе.
-                    </td>
-                }
+<div class="container">
+    <h1 class="text-center">Альбомы</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Название альбома</th>
+                <th scope="col">Песни</th>
                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 {
-                    <td>
-                        @Html.ActionLink("Изменить", "EditAlbum", "Portal"
-                                , new { albumID = album.id }, null)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Удалить", "DeleteAlbum", "Portal"
-                                , new { albumID = album.id }, null)
-                    </td>
+                    <th scope="col">Изменить</th>
+                    <th scope="col">Удалить</th>
                 }
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var album in Model)
+            {
+                if (album.isValid == true || album.isValid == null)
+                {
+                    <tr>
+                        <td>@album.title</td>
+                        <td>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                @Html.ActionLink("Посмотреть песни альбома", "ListOfCompositionsInAlbum", "Portal", new { albumID = album.id }, new { @class = "btn btn-info" })
+                            }
+                            else
+                            {
+                        <td>
+                            Войдите, чтобы просматривать песни в группе.
+                        </td>
+                            }
+                        </td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <td>@Html.ActionLink("Изменить", "EditAlbum", "Portal", new { albumID = album.id }, new { @class = "btn btn-warning" })</td>
+                            <td>@Html.ActionLink("Удалить", "DeleteAlbum", "Portal", new {albumID = album.id}, new {@class = "btn btn-danger"})</td>
+                        }
+                    </tr>
+                }
             }
-        }
-    </tbody>
+        </tbody>
+    </table>
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
-        <tbody>
-            @Html.ActionLink("Добавить альбом", "CreateAlbum", new { id = Request.Params["groupID"] }, new { @class = "btn btn-defualt btn-primary" })
-        </tbody>
+        <div class="text-center">
+            @Html.ActionLink("Добавить альбом", "CreateAlbum", new { id = Request.Params["groupID"] }, new { @class = "btn btn-primary" })
+        </div>
     }
-</table>
+</div>

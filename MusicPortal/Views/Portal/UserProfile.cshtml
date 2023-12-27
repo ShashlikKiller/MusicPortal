@@ -6,82 +6,95 @@
     List<MusicPortal.Models.dbEntities.Language> languages = ViewBag.languages as List<MusicPortal.Models.dbEntities.Language>;
 }
 
-<table title="Любимые песни" style="width:90%">
-    <tr class="text-bg-light">
-        <td>ЛЮБИМЫЕ ПЕСНИ</td>
-    </tr>
-    @if (Model.favoriteSongs.Count() > 0)
-    {
+@if (Model.favoriteSongs.Count() > 0)
+{
+    <table title="Любимые песни" style="width:90%">
+        <h1 class="text-center">Любимые песни</h1>
+        <thead>
+            <tr>
+                <th scope="col">Песня</th>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                {
+                    <th scope="col">Действие</th>
+                }
+            </tr>
+        </thead>
         <tbody>
             @foreach (var composition in Model.favoriteSongs)
             {
-                    Html.RenderPartial("CompositionOverviewPartial", composition);
-                <div class="btn deleteSong btn-primary" data-int="@composition.id">
-                    <span>
-                        Удалить из избранного
-                    </span>
-                </div>
-            }
-            </tbody>
-    }
-    else
-    {
-            <tr class="text-center">
-                <td>
-                    Нет любимых песен!
-                </td>
-            </tr>
-    }
-</table>
 
-<table title="Скачанные песни:" style="width:90%">
-    <tr class="text-bg-light">
-        <td>СКАЧАННЫЕ ПЕСНИ</td>
-    </tr>
-    @if (Model.downloadedSongs.Count() > 0)
-    {
+                <tr>
+                    <td>
+                        @{Html.RenderPartial("CompositionOverviewPartial", composition);}
+                    </td>
+                    <td>
+                        <div class="btn deleteSong btn-primary" data-int="@composition.id">
+                            <span>
+                                Удалить из избранного
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.downloadedSongs.Count() > 0)
+{
+    <table title="Скачанные песни песни" style="width:90%">
+        <h1 class="text-center">Сохраненные песни</h1>
+        <thead>
+            <tr>
+                <th scope="col">Песня</th>
+            </tr>
+        </thead>
         <tbody>
             @foreach (var composition in Model.downloadedSongs)
             {
-                Html.RenderPartial("CompositionOverviewPartial", composition);
+
+                <tr>
+                    <td>
+                        @{Html.RenderPartial("CompositionOverviewPartial", composition);}
+                    </td>
+                    <td>
+                        <div class="btn deleteSong btn-primary" data-int="@composition.id">
+                            <span>
+                                Удалить из сохраненных
+                            </span>
+                        </div>
+                    </td>
+                </tr>
             }
         </tbody>
+    </table>
+}
 
-    }
-    else
-    {
-        <tr class="text-center">
-            <td>
-                Нет загруженных песен!
-            </td>
-        </tr>
-    }
-</table>
+@if (Model.listenedSongs.Count() > 0)
+{
+    <table title="Прослушанные песни" style="width:90%">
+        <h1 class="text-center">Прослушанные песни</h1>
+        <thead>
+            <tr>
+                <th scope="col">Песня</th>
+            </tr>
+        </thead>
 
-<table title="Прослушанные песни" style="width:90%">
-    <tr class="text-bg-light">
-        <td>ПРОСЛУШАННЫЕ ПЕСНИ</td>
-    </tr>
-    @if (Model.listenedSongs.Count() > 0)
-    {
-        <tbody>
-            @foreach (var composition in Model.listenedSongs)
-            {
-                Html.RenderPartial("CompositionOverviewPartial", composition);
-            }
-        </tbody>
-    }
-    else
-    {
-        <tr class="text-center">
-            <td>
-                Нет прослушанных песен!
-            </td>
-        </tr>
-    }
-</table>
+            <tbody>
+                @foreach (var composition in Model.listenedSongs)
+                {
 
-<script>
+                    <tr>
+                        <td>
+                            @{Html.RenderPartial("CompositionOverviewPartial", composition);}
+                        </td>
+                    </tr>
+                 }
+            </tbody>
+    </table>
+}
+
+    <script>
     window.onload = function () {
 
         var buttons = document.getElementsByClassName('deleteSong');
@@ -98,8 +111,9 @@
             data: {SongId: int},
             success: function (data) {
                 alert("Удалено");
+                location.reload();
             }
         });
     }
-</script>
+    </script>
 

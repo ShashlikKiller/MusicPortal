@@ -1,60 +1,88 @@
-﻿@model List<MusicPortal.Models.dbEntities.MusicalGroup>
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+@model List<MusicPortal.Models.dbEntities.MusicalGroup>
 @{
     ViewBag.Title = "Группы";
 }
 
-<table style="width:90%">
-    <tbody>
-        @foreach (var group in Model)
-        {
-            if (group.isValid == true || group.isValid == null)
+
+<div class="container">
+    <h1 class="text-center">Группы</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <th></th>
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model)
             {
-            <tr class="text-center">
-                <td>
-                    @group.groupName
-                </td>
-                @if (User.IsInRole("User"))
+                if (group.isValid == true || group.isValid == null)
                 {
-                <tr class="btn addFavoriteGroup btn-primary" data-int="@group.id">
-                    <td>
-                        Добавить в избранное
-                    </td>
-                </tr>
+                    <tr>
+                    <td class="text-center" style="font-family: Arial, sans-serif; color: black;">@group.groupName</td>
+                        @if (User.IsInRole("User"))
+                        {
+                            <td class="text-right">
+                                <button class="btn btn-primary addFavoriteGroup animate__animated animate__pulse" data-int="@group.id">Добавить в избранное</button>
+                            </td>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <td class="text-right">
+                                @Html.ActionLink("Посмотреть дискографию группы", "ListOfAlbumsOfGroup", "Portal", new { groupID = group.id }, new { @class = "btn btn-info" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>Войдите, чтобы просматривать дискографию группы.</td>
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <td class="text-right">
+                                @Html.ActionLink("Изменить", "EditGroup", "Portal", new { groupID = group.id }, new { @class = "btn btn-warning" })
+                            </td>
+                            <td class="text-right">
+                                @Html.ActionLink("Удалить", "DeleteGroup", "Portal", new { groupID = group.id }, new { @class = "btn btn-danger" })
+                            </td>
+                        }
+                    </tr>
                 }
-                @if (User.Identity.IsAuthenticated)
-                {
-                <td>
-                    @Html.ActionLink("Посмотреть дискографию группы", "ListOfAlbumsOfGroup", "Portal", new { groupID = group.id }, null)
-                </td>
-                }
-                else
-                {
-                    <td>
-                        Войдите, чтобы просматривать дискографию группы.
-                    </td>
-                }
+            }
             @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
-                <td>
-                    @Html.ActionLink("Изменить", "EditGroup", "Portal"
-                           , new { groupID = group.id }, null)
-                </td>
-                <td>
-                    @Html.ActionLink("Удалить", "DeleteGroup", "Portal"
-                           , new { groupID = group.id }, null)
-                </td>
-            }
+                <tr>
+                    <td colspan="5" class="text-right">
+                        @Html.ActionLink("Добавить группу", "CreateGroup", "Portal", new { @class = "btn btn-success" })
+                    </td>
                 </tr>
             }
-        }
         </tbody>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-        {
-            <tbody>
-                @Html.ActionLink("Добавить группу", "CreateGroup", "Portal", new { @class = "btn btn-defualt btn-primary" })
-            </tbody>
-        }
     </table>
+</div>
+
+@*<style>
+  .addFavoriteGroup {
+    animation: pulse 0.5s ease-in-out;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+</style>*@
 
 <script>
     window.onload = function () {

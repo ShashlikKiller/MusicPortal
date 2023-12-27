@@ -3,102 +3,72 @@
     ViewBag.Title = "Композиции";
 }
 
-<table style="width:90%">
-    <tbody>
-        @foreach (var composition in Model)
+<div class="composition-container">
+    @foreach (var composition in Model)
+    {
+        if (composition.isValid == true || composition.isValid == null)
         {
-            if (composition.isValid == true || composition.isValid == null)
-            {
-                Html.RenderPartial("CompositionOverviewPartial", composition);
-                <tr class="text-center">
+            <div class="composition-item">
+                @Html.Partial("CompositionOverviewPartial", composition)
+                <div class="button-container">
                     @if (!User.Identity.IsAuthenticated)
                     {
-
-                        <td>
-                            Войдите, чтобы прослушивать песни и добавлять их в избранное.
-                        </td>
+                        <p>Войдите, чтобы прослушивать песни и добавлять их в избранное.</p>
                     }
-                </tr>
-
-                if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
-                <td>
-                    @Html.ActionLink("Изменить", "EditSong", "Portal"
-                      , new { songID = composition.id}, null)
-                </td>
-                <td>
-                    @Html.ActionLink("Удалить", "DeleteSong", "Portal"
-                      , new { songID = composition.id }, null)
-                </td>
-            }
-
-                if (User.IsInRole("User"))
-                {
-                    <tr class="btn addFavoriteComposition btn-primary" data-int="@composition.id">
-                        <td>
-                            Добавить в избранное
-                        </td>
-                    </tr>
-
-                    <tr class="btn listenSong btn-primary" data-int="@composition.id">
-                        <td>
-                            Прослушать композицию
-                        </td>
-                    </tr>
-                }
-            }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Изменить", "EditSong", "Portal", new { songID = composition.id }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Удалить", "DeleteSong", "Portal", new { songID = composition.id }, new { @class = "btn btn-danger" })
+                    }
+                    @if (User.IsInRole("User"))
+                    {
+                        <button class="btn add-favorite-composition" data-int="@composition.id">Добавить в избранное</button>
+                        <button class="btn listen-song" data-int="@composition.id">Прослушать композицию</button>
+                    }
+                </div>
+            </div>
         }
-        </tbody>
-
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-        {
-            <tbody>
-                @Html.ActionLink("Добавить композицию", "CreateSong", new { id = Request.Params["albumID"] }, new { @class = "btn btn-defualt btn-primary" })
-            </tbody>
-        }
-
-    </table>
-
-    <script>
-        window.onload = function ()
-{
-
-    var buttons = document.getElementsByClassName('addFavoriteComposition');
-    console.log(buttons);
-    for (let i = 0; i < buttons.length; i++)
-    {
-        buttons[i].addEventListener("click", () => AddFavoriteComposition(buttons[i].dataset.int));
     }
-    var buttons2 = document.getElementsByClassName('listenSong');
-    console.log(buttons2);
-    for (let i = 0; i < buttons2.length; i++)
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
-        buttons2[i].addEventListener("click", () => ListenSong(buttons2[i].dataset.int));
+        <div class="add-composition-button">
+            @Html.ActionLink("Добавить композицию", "CreateSong", new { id = Request.Params["albumID"] }, new { @class = "btn btn-primary" })
+        </div>
     }
-}
-    function AddFavoriteComposition(int)
-{
-    $.ajax({
-        type: "POST",
-        url: "@Url.Action("AddFavoriteComposition", "Portal")",
-        data: {compositionID: int},
-        success: function (data)
-        {
-            alert("Добавлено в избранное");
-        }
-    });
-}
+</div>
 
-    function ListenSong(int)
-{
-    $.ajax({
-        type: "POST",
-        url: "@Url.Action("ListenComposition", "Portal")",
-        data: {compositionID: int},
-        success: function (data)
-        {
-            alert("Прослушано");
-        }
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const addFavoriteButtons = document.querySelectorAll('.add-favorite-composition');
+        addFavoriteButtons.forEach(button => {
+            button.addEventListener("click", () => AddFavoriteComposition(button.dataset.int));
+        });
+
+        const listenSongButtons = document.querySelectorAll('.listen-song');
+        listenSongButtons.forEach(button => {
+            button.addEventListener("click", () => ListenSong(button.dataset.int));
+        });
     });
-}
-    </script>
+
+    function AddFavoriteComposition(int) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddFavoriteComposition", "Portal")",
+            data: { compositionID: int },
+            success: function(data) {
+                alert("Добавлено в избранное");
+            }
+        });
+    }
+
+    function ListenSong(int) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ListenComposition", "Portal")",
+            data: { compositionID: int },
+            success: function(data) {
+                alert("Прослушано");
+            }
+        });
+    }
+</script>

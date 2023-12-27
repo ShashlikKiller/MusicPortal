@@ -544,9 +544,12 @@ namespace MusicPortal.Controllers
                 favoriteSong.composition_id = compositionID;
                 favoriteSong.user_id = user.id;
                 favoriteSong.likeDate = DateTime.Now;
-                db.UserFavoriteComposition.Add(favoriteSong);
-                //db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Added;
-                db.SaveChanges();
+                if (!db.UserFavoriteComposition.Any(p => p.user_id == favoriteSong.user_id && p.composition_id == favoriteSong.composition_id))
+                {
+                    db.UserFavoriteComposition.Add(favoriteSong);
+                    //db.Entry(favoriteGroup).State = System.Data.Entity.EntityState.Added;
+                    db.SaveChanges();
+                }
             }
             RedirectToAction("ListOfCompositionsInAlbum", "Portal");
         }
