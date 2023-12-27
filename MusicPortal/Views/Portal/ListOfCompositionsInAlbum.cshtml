@@ -10,9 +10,46 @@
             if (composition.isValid == true || composition.isValid == null)
             {
                 Html.RenderPartial("CompositionOverviewPartial", composition);
+                <tr class="text-center">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+
+                        <td>
+                            Войдите, чтобы прослушивать песни и добавлять их в избранное.
+                        </td>
+                    }
+                </tr>
+
+                if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                <td>
+                    @Html.ActionLink("Изменить", "EditSong", "Portal"
+                      , new { songID = composition.id}, null)
+                </td>
+                <td>
+                    @Html.ActionLink("Удалить", "DeleteSong", "Portal"
+                      , new { songID = composition.id }, null)
+                </td>
+            }
+
+                if (User.IsInRole("User"))
+                {
+                    <tr class="btn addFavoriteComposition btn-primary" data-int="@composition.id">
+                        <td>
+                            Добавить в избранное
+                        </td>
+                    </tr>
+
+                    <tr class="btn listenSong btn-primary" data-int="@composition.id">
+                        <td>
+                            Прослушать композицию
+                        </td>
+                    </tr>
+                }
             }
         }
         </tbody>
+
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
             <tbody>
@@ -22,3 +59,46 @@
 
     </table>
 
+    <script>
+        window.onload = function ()
+{
+
+    var buttons = document.getElementsByClassName('addFavoriteComposition');
+    console.log(buttons);
+    for (let i = 0; i < buttons.length; i++)
+    {
+        buttons[i].addEventListener("click", () => AddFavoriteComposition(buttons[i].dataset.int));
+    }
+    var buttons2 = document.getElementsByClassName('listenSong');
+    console.log(buttons2);
+    for (let i = 0; i < buttons2.length; i++)
+    {
+        buttons2[i].addEventListener("click", () => ListenSong(buttons2[i].dataset.int));
+    }
+}
+    function AddFavoriteComposition(int)
+{
+    $.ajax({
+        type: "POST",
+        url: "@Url.Action("AddFavoriteComposition", "Portal")",
+        data: {compositionID: int},
+        success: function (data)
+        {
+            alert("Добавлено в избранное");
+        }
+    });
+}
+
+    function ListenSong(int)
+{
+    $.ajax({
+        type: "POST",
+        url: "@Url.Action("ListenComposition", "Portal")",
+        data: {compositionID: int},
+        success: function (data)
+        {
+            alert("Прослушано");
+        }
+    });
+}
+    </script>

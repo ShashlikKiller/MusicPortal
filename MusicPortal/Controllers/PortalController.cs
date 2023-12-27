@@ -3,13 +3,9 @@ using MusicPortal.Models.vmEntities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Web.Security;
 using System;
 using System.Web;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Text.RegularExpressions;
 
 namespace MusicPortal.Controllers
 {
